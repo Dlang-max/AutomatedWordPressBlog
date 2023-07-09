@@ -23,6 +23,7 @@
     $('#myForm').submit(function(event) {
         event.preventDefault();
         var formData = $(this).serialize();
+        console.log(formData);
         $.ajax({
         type: 'POST',
         url: 'http://localhost:5000/process-form', // Update the URL with your Flask app's endpoint
