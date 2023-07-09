@@ -10,24 +10,48 @@
     <div id="blog-title-container">
         <form>
             <h3 class="header">Enter Your Blog Title:<span class="required">*</span></h3>
-            <input type="text" name="blog-title" placeholder="Your Blog Title" class="input" required>
-            <button type="submit" id="blog-title-submit-button" class="submit-button" onclick="changeTitleButtonText()">Enter Title</button>
+            <input type="text" id="blog-title" name="blog-title" placeholder="Your Blog Title" class="input" required>
+            <button type="submit" id="blog-title-submit-button" class="submit-button">Enter Title</button>
         </form>
         <form>
             <h3 class="header">Enter Your Blog Topic:<span class="required">*</span></h3>
-            <input type="text" name="blog-topic" placeholder="Your Blog Topic" class="input" required>
-            <button type="submit" id="blog-topic-submit-button" class="submit-button" onclick="changeTopicButtonText()">Enter Topic</button>
+            <input type="text" id="blog-topic" name="blog-topic" placeholder="Your Blog Topic" class="input" required>
+            <button type="submit" id="blog-topic-submit-button" class="submit-button">Enter Topic</button>
         </form>
           <script>
-              function changeTitleButtonText() {
-                var button = document.getElementById("blog-title-submit-button");
-                button.innerHTML = "Change Title";
-              }
+            document.getElementById("blog-title-submit-button").addEventListener("click", function(event){
+                event.preventDefault()
 
-              function changeTopicButtonText() {
+                var title = document.getElementById("blog-title").value;
+                var button = document.getElementById("blog-title-submit-button");
+                if(!title)
+                {
+                    button.innerHTML = "Enter Valid Title";
+                    button.style.backgroundColor = "red";
+                }
+                else
+                {
+                    button.innerHTML = "Change Title";
+                    button.style.backgroundColor = "#007bff";
+                }
+            });
+
+            document.getElementById("blog-topic-submit-button").addEventListener("click", function(event){
+                event.preventDefault()
+
+                var topic = document.getElementById("blog-topic").value;
                 var button = document.getElementById("blog-topic-submit-button");
-                button.innerHTML = "Change Topic";
-              }
+                if(!topic)
+                {
+                    button.innerHTML = "Enter Valid Topic";
+                    button.style.backgroundColor = "red";
+                }
+                else
+                {
+                    button.innerHTML = "Change Topic";
+                    button.style.backgroundColor = "#007bff";
+                }
+            });
             </script>
     </div>
 </body>
