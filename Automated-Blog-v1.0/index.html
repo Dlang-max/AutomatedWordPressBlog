@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="blog-title-container">
+        <form>
+            <h3 class="header">Enter Your Blog Title:<span class="required">*</span></h3>
+            <input type="text" name="blog-title" placeholder="Your Blog Title" class="input" required>
+            <button type="submit" id="blog-title-submit-button" class="submit-button" onclick="changeTitleButtonText()">Enter Title</button>
+        </form>
+        <form>
+            <h3 class="header">Enter Your Blog Topic:<span class="required">*</span></h3>
+            <input type="text" name="blog-topic" placeholder="Your Blog Topic" class="input" required>
+            <button type="submit" id="blog-topic-submit-button" class="submit-button" onclick="changeTopicButtonText()">Enter Topic</button>
+        </form>
+          <script>
+              function changeTitleButtonText() {
+                var button = document.getElementById("blog-title-submit-button");
+                button.innerHTML = "Change Title";
+              }
+
+              function changeTopicButtonText() {
+                var button = document.getElementById("blog-topic-submit-button");
+                button.innerHTML = "Change Topic";
+              }
+            </script>
+    </div>
+</body>
+      
+
+</html>

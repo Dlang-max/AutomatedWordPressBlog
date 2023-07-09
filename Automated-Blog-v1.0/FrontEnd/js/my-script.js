@@ -6,6 +6,7 @@ jQuery(document).ready(function($) {
       // Get form data
       var formData = $(this).serialize();
       console.log(formData);
+      console.log(my_ajax_object.shortcode_output)
   
       // AJAX request
       $.ajax({
