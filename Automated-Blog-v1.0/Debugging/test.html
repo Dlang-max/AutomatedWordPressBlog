@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+
+
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 700px;
+            height: 100%;
+            text-align: center;
+            background-color: black;
+            border-radius: 2em
+        }
+
+        .container h1, .container{
+            color: white;
+            padding: 1em;
+            display: block;
+        }
+
+        .input{
+            padding: 1em;
+            display: block;
+            width: 80%;
+            border-radius: 2em;
+            margin: 1em auto;
+            color: black;
+            transition: box-shadow 0.3s;
+        }
+        .input:hover{
+            box-shadow: 0 0 10px white;
+        }
+
+        .custom-textarea {
+            display: block;
+            margin: 1em auto;
+            background-color: white;
+            border: 1px solid black;
+            padding: 10px;
+            border-radius: 1.5em;
+            width: 80%;
+
+        }
+
+        .custom-textarea textarea {
+            width: 100%;
+            height: 200px;
+            resize: none;
+            background-color: transparent;
+            color: black;
+            border: none;
+            outline: none;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            
+        }
+
+        .custom-dropdown select {
+            padding: 1em;
+            width: 85%;
+            border: 1px solid black;
+            background-color: white;
+            color: black;
+            border-radius: 1.5em;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        label{
+            display: block;
+            color: black;
+            background-color: white;
+            width: 80%;
+            padding: 1em; 
+            border-radius: 2em;
+            margin: 1em auto;
+            transition: box-shadow 0.3s;
+
+        }
+        label:hover{
+            box-shadow: 0 0 10px white;
+        }
+        .custom-textarea{
+            transition: box-shadow 0.3s;
+        }
+        .custom-textarea:hover{
+            box-shadow: 0 0 10px white;
+        }
+
+        .custom-textarea{
+            transition: box-shadow 0.3s;
+        }
+        .custom-textarea:hover{
+            box-shadow: 0 0 10px white;
+        }
+
+       select{
+            transition: box-shadow 0.3s;
+        }
+       select:hover{
+            box-shadow: 0 0 10px white;
+        }
+
+        .submit{
+            display: block;
+            color: black;
+            background-color: white;
+            width: 85%;
+            padding: 1.25em; 
+            border-radius: 2em;
+            margin: 1em auto;
+            transition: box-shadow 0.3s;
+        }
+
+        .submit:hover{
+            box-shadow: 0 0 10px white;
+        }
+
+        .submit:active{
+            scale: 0.95;
+        }
+
+        .custom-date-picker input[type="date"] {
+            display: block;
+            width: 80%;
+            height: 1em;
+            padding: 1em;
+            background-color: white;
+            color: black;
+            border-radius: 2em;
+            margin: 1em auto;
+        }
+
+
+    </style>
+
+
+  <div class="container">
+    <h1>Automated WordPress Blog</h1>
+    <form id="blog">
+        <input type="text" name="topic" class="input" placeholder="Enter Title" required oninput="setCustomValidity('')" oninvalid="setCustomValidity('Enter Blog Topic')">
+        <input type="text" name="title" class="input" placeholder="Enter Topic" required oninput="setCustomValidity('')" oninvalid="setCustomValidity('Enter Blog Title')">
+        <div class="custom-textarea">
+            <textarea name="example-content" placeholder="Enter your text here"></textarea>
+        </div>
+        <div class="custom-dropdown">
+            <select required name="Length"oninput="setCustomValidity('')" oninvalid="setCustomValidity('Select Blog Length')">
+            <option value="" disabled selected>Blog Length</option>
+              <option value="option1">Short</option>
+              <option value="option2">Medium</option>
+              <option value="option3">Long</option>
+            </select>
+          </div>
+        <input type="url" name="links" class="input" placeholder="Links to Include">
+        <input type="text" name="keywords" class="input" placeholder="Keywords to Include">
+        <input type="file" name="image" class="input" id="file" accept="image/png">
+        <label for="file">Choose a Preview Image</label>
+        <button type="submit" class="submit" id="generate-blog">Generate Blog</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -20,19 +20,14 @@ function my_ajax_plugin_enqueue_scripts() {
     // Enqueue your JavaScript file
     wp_enqueue_script('my-ajax-script', plugins_url('js/my-script.js', __FILE__), array('jquery'), '1.0.0', true);
 
-    ob_start();
-    echo do_shortcode('[mepr-account-info field="first_name"]');
-    $shortcode_output = ob_get_clean();
-
 
     // Localize the AJAX URL
     wp_localize_script('my-ajax-script', 'my_ajax_object', array(
         'ajax_url' => admin_url('admin-ajax.php'),
-        'nonce' => wp_create_nonce('my-ajax-nonce'),
-        'shortcode_output' => $shortcode_output,
-
+        'nonce' => wp_create_nonce('my-ajax-nonce')
     ));
 }
+
 add_action('wp_enqueue_scripts', 'my_ajax_plugin_enqueue_scripts');
 
 // AJAX handler

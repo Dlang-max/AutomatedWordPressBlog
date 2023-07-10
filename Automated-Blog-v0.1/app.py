@@ -14,7 +14,7 @@ def process_form():
         # Process the form data as needed (e.g., store in a database)
         
         # Send a response back to the client
-        response_data = {'name': name, 'email': email}
+        response_data = {'name': name, 'email': email, 'response': 'Hello ' + name + '!'}
         return jsonify(response_data)
     else:
         return "Method Not Allowed", 405

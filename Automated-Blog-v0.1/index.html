@@ -30,7 +30,7 @@
         data: formData,
         success: function(response) {
             console.log(response);
-            $('#responseContainer').text(response['name'] + ' ' + response['email']);
+            $('#responseContainer').text(response['response']);
             // Display a success message or perform any other action
         },
         error: function(xhr, status, error) {

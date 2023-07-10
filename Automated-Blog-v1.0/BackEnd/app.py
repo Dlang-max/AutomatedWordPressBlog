@@ -9,6 +9,7 @@ CORS(app)
 
 @app.route('/process-form', methods=['POST'])
 def process_form():
+    print("Hello World")
     if request.method == 'POST':
         form_data = request.form.get('data')  # Retrieve form data from 'data' field
         parsed_data = parse_qs(form_data)  # Parse the form data into a dictionary
