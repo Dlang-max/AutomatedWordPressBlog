@@ -3,58 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
     <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="blog-title-container">
-        <form>
-            <h3 class="header">Enter Your Blog Title:<span class="required">*</span></h3>
-            <input type="text" id="blog-title" name="blog-title" placeholder="Your Blog Title" class="input" required>
-            <button type="submit" id="blog-title-submit-button" class="submit-button">Enter Title</button>
-        </form>
-        <form>
-            <h3 class="header">Enter Your Blog Topic:<span class="required">*</span></h3>
-            <input type="text" id="blog-topic" name="blog-topic" placeholder="Your Blog Topic" class="input" required>
-            <button type="submit" id="blog-topic-submit-button" class="submit-button">Enter Topic</button>
-        </form>
-          <script>
-            document.getElementById("blog-title-submit-button").addEventListener("click", function(event){
-                event.preventDefault()
-
-                var title = document.getElementById("blog-title").value;
-                var button = document.getElementById("blog-title-submit-button");
-                if(!title)
-                {
-                    button.innerHTML = "Enter Valid Title";
-                    button.style.backgroundColor = "red";
-                }
-                else
-                {
-                    button.innerHTML = "Change Title";
-                    button.style.backgroundColor = "#007bff";
-                }
-            });
-
-            document.getElementById("blog-topic-submit-button").addEventListener("click", function(event){
-                event.preventDefault()
-
-                var topic = document.getElementById("blog-topic").value;
-                var button = document.getElementById("blog-topic-submit-button");
-                if(!topic)
-                {
-                    button.innerHTML = "Enter Valid Topic";
-                    button.style.backgroundColor = "red";
-                }
-                else
-                {
-                    button.innerHTML = "Change Topic";
-                    button.style.backgroundColor = "#007bff";
-                }
-            });
-            </script>
-    </div>
+    <main>
+        <div class="title">
+            <form>
+                <h3 class="header">Enter Your Blog Title</h3>
+                <input type="text" class="blog-input" name="blog-title" placeholder="Your Blog Title" required>
+                <button type="submit" id="blog-title-submit-button" class="submit-button">Enter Title</button>
+            </form>
+        </div>
+        </div>
+        <div class="title">
+            <form>
+                <h3 class="header">Enter Your Blog Topic</h3>
+                <input type="text" class="blog-input" name="blog-topic" placeholder="Your Blog Topic" required>
+                <button type="submit" id="blog-topic-submit-button" class="submit-button">Enter Topic</button>
+            </form>
+        </div>
+        </div>
+        <div class="title" id="example-content-container">
+            <form>
+                <h3 class="header">Enter Example Blog Content</h3>
+                <textarea rows="4" cols="50" name="example-content" id="example-content"></textarea>
+                <button type="submit" id="example-content-button" class="submit-button">Enter Content</button>
+            </form>
+        </div>
+    </main> 
 </body>
-      
 
 </html>
+
+
+

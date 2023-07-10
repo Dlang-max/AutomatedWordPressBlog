@@ -1,58 +1,83 @@
-body {
+main{
     display: flex;
-    align-items: center;
     justify-content: center;
-    height: 100vh;
-    margin: 0;
+    flex-direction: column;
 }
 
+.title{
+   align-self: center;
+   border: 2px solid gray;
+   border-radius: 10px;
+   width: 500px;
+   height: 100px;
+   transition: box-shadow 0.3s;
+}
+
+.title:hover {
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.blog-input{
+    margin-top: -10px;
+    margin-left: 20%;
+    border: 1px solid lightgray;
+    width: 300px;
+    height: 30px;
+    border-radius: 10px;
+    transition: box-shadow 0.3s;
+}
+#example-content-input{
+    margin-left: 16%;
+}
+
+#example-content-button{
+    width: 100px
+}
+
+.blog-input:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
 
 .header{
-    font-family: "Optima", sans-serif;
-    font-size: large;
+    font-family: 'Arial';
+    font-size: x-large;
+    margin-left: 10px;
+    margin-top: 10px;
 }
 
-.required {
-    color: red;
-    margin-left: 2px;
+.submit-button{
+    border: 1px solid lightgray;
+    height: 35px;
+    border-radius: 10px;
+    color: rgb(0, 0, 0);
+    background-color: limegreen;
+    transition: box-shadow 0.3s;
+
 }
 
-
-.input {
-    width: 200px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    color: #333;
-    background-color: #fff;
+.submit-button:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+#example-content-container{
+    height: 230px;
 }
 
-.input::placeholder {
-    color: #999;
+#example-content{
+    margin-left: 22px;
+    font-family: 'Arial';
+    width: 450px;
+    height: 120px;
+    resize: none;
+    transition: box-shadow 0.3s;
+    border-radius: 8px;
+
 }
 
-.submit-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
+#example-content:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.submit-button:hover {
-    background-color: #0056b3;
-}
-
-.submit-button:focus {
-    outline: none;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+#example-content-button{
+    margin-left: 78.5%; 
 }
