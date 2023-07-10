@@ -11,18 +11,16 @@
         <div class="title">
             <form>
                 <h3 class="header">Enter Your Blog Title</h3>
-                <input type="text" class="blog-input" name="blog-title" placeholder="Your Blog Title" required>
+                <input type="text" class="blog-input" name="blog-title" required>
                 <button type="submit" id="blog-title-submit-button" class="submit-button">Enter Title</button>
             </form>
-        </div>
         </div>
         <div class="title">
             <form>
                 <h3 class="header">Enter Your Blog Topic</h3>
-                <input type="text" class="blog-input" name="blog-topic" placeholder="Your Blog Topic" required>
+                <input type="text" class="blog-input" name="blog-topic" required>
                 <button type="submit" id="blog-topic-submit-button" class="submit-button">Enter Topic</button>
             </form>
-        </div>
         </div>
         <div class="title" id="example-content-container">
             <form>
@@ -31,6 +29,64 @@
                 <button type="submit" id="example-content-button" class="submit-button">Enter Content</button>
             </form>
         </div>
+        <div class="title" id="link-container">
+            <form id="link-form">
+                <h3 class="header">Enter Links to Include in Blog</h3>
+                <div id="container">
+                    <input type="url" class="link-input" name="blog-links" placeholder="">
+                    <input type="url" class="link-input" name="blog-links" placeholder="">
+                    <input type="url" class="link-input" name="blog-links" placeholder=""> 
+                </div>
+                <button class="submit-button" id="add-links" onclick="addURLInput()">Add</button>
+                <button type="submit" id="blog-link-submit-button" class="submit-button">Enter Links</button>
+            </form>
+        </div>
+        <div class="title" id="link-container">
+            <form id="keyword-form">
+                <h3 class="header">Enter Keywords to Include in Blog</h3>
+                <div id="keyword-container">
+                    <input type="text" class="keyword-input" name="blog-keywords" placeholder="">
+                    <input type="text" class="keyword-input" name="blog-keywords" placeholder="">
+                    <input type="text" class="keyword-input" name="blog-keywords" placeholder=""> 
+                </div>
+                <button class="submit-button" id="add-links" onclick="addTextInput()">Add</button>
+                <button type="submit" id="blog-keyword-submit-button" class="submit-button">Enter Keywords</button>
+            </form>
+        </div>
+
+        <script>
+            function addURLInput() {
+                var container = document.getElementById("container");
+
+                // Create a new text input element
+                var newTextInput = document.createElement("input");
+                newTextInput.type = "url";
+                newTextInput.classList.add("link-input");
+
+                // Append the new text input to the container
+                container.appendChild(newTextInput);
+            }
+
+            document.getElementById("link-form").addEventListener("submit", function(event) {
+                event.preventDefault();
+            });
+
+            function addTextInput() {
+                var container = document.getElementById("keyword-container");
+
+                // Create a new text input element
+                var newTextInput = document.createElement("input");
+                newTextInput.type = "text";
+                newTextInput.classList.add("keyword-input");
+
+                // Append the new text input to the container
+                container.appendChild(newTextInput);
+            }
+
+            document.getElementById("keyword-form").addEventListener("submit", function(event) {
+                event.preventDefault();
+            });
+        </script>
     </main> 
 </body>
 
