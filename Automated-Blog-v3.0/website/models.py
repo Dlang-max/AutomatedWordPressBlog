@@ -11,4 +11,4 @@ class User(db.Model, UserMixin):
     website_url = db.Column(db.String(150))
     website_application_password = db.Column(db.String(150))
     membership_level = db.Column(db.String(150))
-    has_paid = db.Column(db.Boolean)
+    has_paid = db.Column(db.Boolean, default=False)
