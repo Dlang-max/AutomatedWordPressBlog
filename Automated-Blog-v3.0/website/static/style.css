@@ -55,6 +55,7 @@
   .navbar-item{
     width: 100%;
   }
+
   svg{
     display: flex;
     align-items: center;
@@ -81,6 +82,14 @@
     .navbar{
         top: 0;
         justify-content: space-around;
+    }
+
+    #home{
+      display: none;
+    }
+
+    #message{
+      display: none;
     }
   }
 
