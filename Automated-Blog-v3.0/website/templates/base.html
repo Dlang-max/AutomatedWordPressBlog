@@ -5,13 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="static/style.css">
+    <script src="static/script.js"></script>
     <title>{% block title %}base{% endblock %}</title>
   </head>
   <body>
+
+    <nav class="side-navbar" id="side-navbar">  
+      <div class="side-menu-text" id="close-button" onclick="toggleNavbar()">
+        <svg id="close" width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"><path d="M0,0L300,300" transform="matrix(.935529 0 0 0.934047 9.670651 9.89295)" fill="#000" stroke="#000" stroke-width="20" stroke-linecap="round"/><path d="M0,0L300,300" transform="matrix(0 0.935529-.934047 0 290.107051 9.89295)" fill="none" stroke="#000" stroke-width="20" stroke-linecap="round"/></svg>             
+      </div>    
+      <ul class="side-navbar-nav">
+        <li class="side-nav-item">
+          <a href="/dashboard" class="side-nav-link" id="profile">
+            <div class="side-menu-text">
+              <p class="side-item">Profile</p>
+              </svg>                      
+            </div>
+          </a>
+        </li>
+        <li class="side-nav-item">
+          <a href="/logout" class="side-nav-link" id="logout">
+            <div class="side-menu-text">
+              <p class="side-item">Logout</p>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </nav>
     <nav class="navbar">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a href="/" class="nav-link" id="home">
+            <a href="/dashboard" class="nav-link" id="home">
               <div class="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="rgba(0, 0, 0, )" class="bi bi-house" viewBox="0 0 16 16">
                     <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
@@ -30,7 +54,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/" class="nav-link" id="profile">
+            <a href="#" class="nav-link" id="profile" onclick="toggleNavbar()">
               <div class="icon">
                 <svg id="eP05R1SmAOD1" width="50" height="50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 16 16" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"><path d="M8,8c1.656854,0,3-1.343146,3-3s-1.343146-3-3-3-3,1.343146-3,3s1.343146,3,3,3Zm2-3c0,1.104569-.895431,2-2,2s-2-.895431-2-2s.895431-2,2-2s2,.895431,2,2Zm4,8c0,1-1,1-1,1h-10c0,0-1,0-1-1s1-4,6-4s6,3,6,4Zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516,10.68,10.289,10,8,10c-2.29,0-3.516.68-4.168,1.332-.678.678-.83,1.418-.832,1.664h10Z" transform="matrix(.806221 0 0 0.806221 1.550232 1.550232)"/><ellipse rx="8" ry="8" transform="matrix(.942943 0 0 0.942943 8 8)" fill="rgba(210,219,237,0)" stroke="#000"/></svg>
               </div>
@@ -43,90 +67,3 @@
     </main>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <!-- <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbar"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbar">
-        <div class="navbar-nav">
-          {% if user.is_authenticated %}
-          <a class="nav-item nav-link" id="home" href="/"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><style>svg{fill:#ffffff}</style><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg></a>
-          <a class="nav-item nav-link" id="logout" href="/logout">Logout</a>
-          {% else %}
-          <a class="nav-item nav-link" id="login" href="/login">Login</a>
-          <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign Up</a>
-          {% endif %}
-        </div>
-      </div>
-    </nav>
-
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-    messages %} {% for category, message in messages %} {% if category ==
-    'error' %}
-    <div class="alert alert-danger alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% else %}
-    <div class="alert alert-success alter-dismissable fade show" role="alert">
-      {{ message }}
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    {% endif %} {% endfor %} {% endif %} {% endwith %}
-
-    <div class="container"></div>
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-
-{% block javascript %}
-    <script type="text/javascript">
-      function deleteNote(noteId) {
-  fetch("/delete-note", {
-    method: "POST",
-    body: JSON.stringify({ noteId: noteId }),
-  }).then((_res) => {
-    window.location.href = "/";
-  });
-  }
-</script>
-{% endblock %}
-  </body>
-</html> -->
