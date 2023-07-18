@@ -32,6 +32,7 @@
     padding: 1rem;
   }
 
+
   .navbar{
     width: 100vw;
     height: 5rem;
@@ -74,6 +75,11 @@
 
   .container:hover{
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+
+  #logo{
+    border: none;
+    background-color: none;
   }
 
 
