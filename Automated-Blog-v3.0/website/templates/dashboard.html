@@ -1,6 +1,35 @@
 {% extends "base.html" %} 
     {% block title %}Dashboard{% endblock %} 
-    
+
     {% block content %}
+        <link rel="stylesheet" href="static/dashboardStyle.css">
+        <header class="header">
+            <div class="header-text">Welcome, {{ user.first_name }}!</div>
+        </header>
+        <main>
+            <div class="container">
+                {% if user.membership_level == "Free" and user.free_blogs_remaining == 1%}
+                    <div class="free-subscription-container">
+                        <p align="center">You can currently create one free blog. To create more, upgrade your membership.</p>
+                        <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                    </div>
+                {% else %}
+                    <div class="free-subscription-container">
+                        <p align="center">You are out of free blogs. To create more, upgrade your membership.</p>
+                        <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                    </div>
+                {% endif %}
+                <div class="info-container">
+                    <div class="subscription-container">
+                        
+                    </div>
+                    <div class="blog-container">test
+                    </div>
+                </div>
+
+                
+            </div>
+        </main>
+        
     {% endblock %}
     

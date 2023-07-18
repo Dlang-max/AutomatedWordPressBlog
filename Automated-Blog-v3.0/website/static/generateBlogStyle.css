@@ -55,7 +55,7 @@
     padding: 10px;
     border-radius: 5px;
     border: 1px solid black;
-    width: 300px; 
+    width: 320px; 
     background-color: var(--bg-primary);
     color: var(--text-primary);
     transition: box-shadow 0.3s;

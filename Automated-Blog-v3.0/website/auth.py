@@ -45,6 +45,7 @@ def sign_up():
         website_url = request.form.get('websiteURL')
         app_pass_1 = request.form.get('appPassword1')
         app_pass_2 = request.form.get('appPassword2')
+        subscription_type = 'Free'
 
 
 
@@ -66,13 +67,14 @@ def sign_up():
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
                 password1, method='sha256'), website_url=website_url, 
-                website_application_password=generate_password_hash(app_pass_1, method='sha256'))
+                website_application_password=generate_password_hash(app_pass_1, method='sha256'),
+                membership_level=subscription_type)
             
 
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
-            return redirect(url_for('views.home'))
+            return redirect(url_for('views.dashboard'))
 
     return render_template("sign_up.html", user=current_user)
