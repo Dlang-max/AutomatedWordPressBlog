@@ -8,12 +8,16 @@
     --transition-speed: 600ms;
   }
 
-  .main{
+  main{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin: 0;
+    padding: 0; 
+    overflow: auto;
   }
+
   .header{
     display: flex;
     align-items: center;
@@ -74,9 +78,25 @@
     color: white;
   }
 
+
   .info-container{
     display: flex;
     flex-direction: column;
+  }
+  .border-container{
+    border-bottom: 1px solid black;
+  }
+  .blog-container{
+    margin: 10px; 
+    border: 1px solid black;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+    width: 470px;
+    margin-left: 10px;
+  }
+
+  .blog-container p{
+    margin-left: 10px; 
   }
 
   @media only screen and (min-width: 1024px){
