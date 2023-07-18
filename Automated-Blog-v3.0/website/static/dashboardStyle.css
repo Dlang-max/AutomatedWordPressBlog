@@ -46,13 +46,15 @@
 
   .free-subscription-container{
     display: flex;
+    align-items: center;
     flex-direction: row;
     justify-content: center;
     border: 1px solid black;
     padding: 5px; 
     border-radius: 100px;
     transition: box-shadow 0.3s;
-    width: 470px; 
+    width: calc(100vw - 2rem); 
+    margin-top: 5px; 
   }
 
   .free-subscription-container:hover{
@@ -63,17 +65,16 @@
     margin: 5px;
   }
 
-  .free-subscription-container button{
+  .free-subscription-container a button{
     background-color: var(--bg-primary);
     border-radius: 100px;
     color: var(--text-primary);
     transition: box-shadow 0.3s;
     transition: color 0.3s;
     cursor: pointer;
-
   }
 
-  .free-subscription-container button:hover{
+  .free-subscription-container a button:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, .3); 
     color: white;
   }
@@ -91,13 +92,69 @@
     border: 1px solid black;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .3);
-    width: 470px;
+    width: calc(100vw - 2rem); 
     margin-left: 10px;
   }
 
   .blog-container p{
     margin-left: 10px; 
   }
+
+  .prepublished-blogs-container{
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+
+  .prepublished-blogs-info-container{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .blog-title-topic-info{
+    width: 150px;
+  }
+
+  .blog-title{
+    padding: 10px;
+    border-right: 1px solid black;  
+  }
+
+  .blog-publish-date{
+    padding: 5px;
+    display: flex;
+    align-items: center;
+  }
+
+  .green{
+    margin-left: 2px; 
+    background-color: green;
+    width: 10px; 
+    height: 10px;
+    border-radius: 20px;
+  }
+
+  .membership-upgrade-container{
+    padding: 10px; 
+    border-top: 1px solid black;
+    display: flex;
+    justify-content: center;
+  }
+
+  .membership-upgrade-container button{
+    background-color: var(--bg-primary);
+    border-radius: 100px;
+    color: var(--text-primary);
+    transition: box-shadow 0.3s;
+    transition: color 0.3s;
+    cursor: pointer;
+    padding: 5px; 
+  }
+
+  .membership-upgrade-container button:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3); 
+    color: white;
+  }
+
 
   @media only screen and (min-width: 1024px){
     .free-subscription-container{

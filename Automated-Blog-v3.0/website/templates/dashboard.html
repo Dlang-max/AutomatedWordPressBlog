@@ -11,22 +11,50 @@
                 {% if user.membership_level == "Free" and user.free_blogs_remaining == 1%}
                     <div class="free-subscription-container">
                         <p align="center">You can currently create one free blog. To create more, upgrade your membership.</p>
-                        <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                        <a href="/upgradeMembership">
+                            <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                        </a>
                     </div>
                 {% else %}
                     <div class="free-subscription-container">
                         <p align="center">You are out of free blogs. To create more, upgrade your membership.</p>
-                        <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                        <a href="/upgradeMembership">
+                            <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                        </a>
                     </div>
                 {% endif %}
                 <div class="info-container">
                     <div class="blog-container">
                         <div class="border-container">
-                            <p>Prepublished Blogs</p>
+                            <p>Blog Hub</p>
+                        </div>
+                        <div class="blogs-remaining-container">
+                            <p>Blogs remaining this month: {{1}}</p>
+                        </div>
+                        <div class="prepublished-blogs-container">
+                            <p>Prepublished Blogs:</p>
+                        </div>
+                        <div class="prepublished-blogs-info-container">
+                            <div class="blog-title-topic-info">
+                                <div class="blog-title">Title: Why you should throw away recyclables</div>
+                            </div>
+                            <div class="publish-date-contianer">
+                                <div class="blog-publish-date">Publish Date: 2023-07-24 <div class="green"></div> </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="subscription-container">
-
+                    <div class="blog-container">
+                        <div class="border-container">
+                            <p>Membership Hub</p>
+                        </div>
+                        <div class="blogs-remaining-container">
+                            <p>Current Membership Level: {{ user.membership_level }}</p>
+                        </div>
+                        <div class="membership-upgrade-container">
+                            <a href="/upgradeMembership">
+                                <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
