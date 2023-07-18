@@ -138,6 +138,7 @@
     border-top: 1px solid black;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   .membership-upgrade-container button{
@@ -162,6 +163,11 @@
     }
     main{
         width: calc(100vw - 5rem);
+    }
+
+    .info-container{
+        width: calc(100vw - 5rem); 
+        flex-direction: row;
     }
   }
 
