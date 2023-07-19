@@ -163,11 +163,18 @@
     }
     main{
         width: calc(100vw - 5rem);
+
     }
 
     .info-container{
-        width: calc(100vw - 5rem); 
+        width: 800px; 
         flex-direction: row;
+    }
+
+    #membership-container{
+      height: 150px;
+      padding: 5px; 
+      align-self: flex-start;
     }
   }
 
