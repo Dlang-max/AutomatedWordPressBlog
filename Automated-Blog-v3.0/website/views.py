@@ -4,6 +4,8 @@ from .models import Blog
 from . import db
 import json
 import BlogWriter
+import stripe
+import config
 
 views = Blueprint('views', __name__)
 
@@ -26,7 +28,7 @@ def dashboard():
 def generateBlog():
     content = ''
     title = ''
-    
+
     if request.method == 'POST':
         title = request.form.get('blog-title')
         topic = request.form.get('blog-topic')

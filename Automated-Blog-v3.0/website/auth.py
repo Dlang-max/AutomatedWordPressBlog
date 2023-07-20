@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
@@ -21,6 +21,7 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
+                session['user'] = user
                 return redirect(url_for('views.dashboard'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -99,6 +100,7 @@ def upgradeMembership():
 
 
 @auth.route('/create-checkout-session', methods=['POST'])
+@login_required
 def create_checkout_session():
     price = request.form.get('priceId')
     domain_url = 'http://localhost:5000/'
@@ -116,8 +118,8 @@ def create_checkout_session():
 
         # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + '/',
-            cancel_url=domain_url + '/',
+            success_url=domain_url + '/dashboard?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=domain_url + '/dashboard',
             mode='subscription',
             # automatic_tax={'enabled': True},
             line_items=[{
@@ -132,6 +134,7 @@ def create_checkout_session():
 
 @auth.route('/webhook', methods=['POST'])
 def stripe_webhook():
+    print('hello')
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get("Stripe-Signature")
 
@@ -148,11 +151,15 @@ def stripe_webhook():
         return "Invalid signature", 400
 
     # Handle the checkout.session.completed event
+    print(event['type'])
     if event["type"] == "checkout.session.completed":
         print("Payment was successful.")
         print(event['data']['object']['subscription'])
+        print(event['data'])
+        print(event)
         global subscription_confirmed 
         subscription_confirmed = True
         print(subscription_confirmed)
-        
+
+
     return redirect(url_for('views.dashboard'))

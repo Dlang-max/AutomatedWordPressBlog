@@ -103,14 +103,3 @@
   select:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, .3);
   }
-
-  #generated-blog-content{
-    height: 500px;
-    margin-bottom: 300px;
-  }
-
-  .content-container{
-    height: 300px; 
-    overflow: auto;
-  }
-  
