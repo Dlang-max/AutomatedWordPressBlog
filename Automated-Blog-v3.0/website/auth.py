@@ -1,8 +1,11 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db   ##means from __init__.py import db
+from . import db
 from flask_login import login_user, login_required, logout_user, current_user
+import config
+import stripe
+
 
 
 auth = Blueprint('auth', __name__)
@@ -78,9 +81,68 @@ def sign_up():
             return redirect(url_for('views.dashboard'))
 
     return render_template("sign_up.html", user=current_user)
-    
+
+@auth.route('/config')
+@login_required
+def get_publishable_key():
+    stripe_config = {'publicKey': config.stripe_keys['publishable_key']}
+    return jsonify(stripe_config)
+
+
+
 @auth.route('/upgradeMembership', methods=['GET', 'POST'])
 @login_required
 def upgradeMembership():
+    price = request.form.get('priceId')
+    domain_url = 'http://localhost:5000/'
+    stripe.api_key = config.stripe_keys["secret_key"]
+
+
+    try:
+        
+        checkout_session = stripe.checkout.Session.create(
+            success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=domain_url + 'canceled',
+            mode='subscription',
+            line_items=[{
+                'price': price,
+                'quantity': 1
+            }],
+        )
+        return redirect(checkout_session.url, code=303)
+    except Exception as e:
+        return jsonify({'error': {'message': str(e)}}), 400
+
+
+@auth.route('/webhook', methods=['POST'])
+@login_required
+def stripe_webhook():
+    payload = request.get_data(as_text=True)
+    sig_header = request.headers.get("Stripe-Signature")
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, config.stripe_keys["endpoint_secret"]
+        )
+
+    except ValueError as e:
+        # Invalid payload
+        return "Invalid payload", 400
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return "Invalid signature", 400
+
+    # Handle the checkout.session.completed event
+    if event["type"] == "checkout.session.completed":
+        print("Payment was successful.")
+        print(event['data']['object']['subscription'])
+        global subscription_confirmed 
+        subscription_confirmed = True
+        print(subscription_confirmed)
+
+        # TODO: run some custom code here
+
+    # data = json.loads(payload)
+    # print(data['data']['object']['subscription'][0])
+    return redirect(url_for('success'))
     
-    return render_template("upgradeMembership.html", user=current_user)
