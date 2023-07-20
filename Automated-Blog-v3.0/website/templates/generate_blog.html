@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="static/generateBlogStyle.css">
     <div class="container">
         <div class="form-container">
+          {% if user.free_blogs_remaining == 1 or user.blogs_remaining_this_month > 0 %}
             <form method="POST">
                 <h2 align="center">Create Blog</h3>
                 <div class="form-group">
@@ -61,13 +62,37 @@
                     </select>
                   </div>
                   <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="publish-date"
+                      name="publish-date"
+                      placeholder="Enter Publish Date (Year-Month-Day)"
+                      required
+                    />
+                  </div>
+                  <div class="form-group">
                     <input type="file" name="file" class="file" id="file" accept="image/png">
                     <label align="center" for="file">Choose a Preview Image</label>
                   </div>
                 <br />
-                <button type="submit" class="btn btn-primary">Create Blog</button>
+                  <button type="submit" class="btn btn-primary">Create Blog</button>
               </form>
-              {{ text }}
+              {% else %}
+              <form action="/upgradeMembership" method="POST">
+                <button type="submit" class="btn btn-primary">Upgrade Membership for More Blogs</button>
+              </form>
+              {% endif %}
+              <div class="generated-content-editor" id="generated-blog-content">
+                <form action="POST">
+                  <div class="title-container">
+                      <p>Title: <p contenteditable="true">{{title}}</p> </p>
+                  </div>
+                  <div class="blog-content-generator">
+                      <p>Content: <p contenteditable="true" class="content-container">{{content}}</p> </p>
+                  </div>
+                </form>
+              </div>
         </div>
     </div>
 {% endblock %}

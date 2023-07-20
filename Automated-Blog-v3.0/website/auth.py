@@ -52,6 +52,7 @@ def sign_up():
 
 
         user = User.query.filter_by(email=email).first()
+        website = User.query.filter_by(website_url=website_url).first()
         if user:
             flash('Email already exists.', category='error')
         elif len(email) < 4:
@@ -62,6 +63,8 @@ def sign_up():
             flash('Passwords don\'t match.', category='error')
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
+        elif website:
+            flash('Website URL already being used.', category='error')
         elif len(website_url) < 1:
             flash('Website URL must be at least 1 character.', category='error')
         elif app_pass_1 != app_pass_2:

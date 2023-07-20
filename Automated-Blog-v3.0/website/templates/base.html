@@ -23,6 +23,15 @@
             </div>
           </a>
         </li>
+        {% if user.membership_level != 'Free' %}
+          <li class="side-nav-item">
+            <a href="/dashboard" class="side-nav-link" id="profile">
+              <div class="side-menu-text">
+                <p class="side-item">Change Membership</p>
+              </div>
+            </a>
+          </li>
+        {% endif %}
         <li class="side-nav-item">
           <a href="/logout" class="side-nav-link" id="logout">
             <div class="side-menu-text">
