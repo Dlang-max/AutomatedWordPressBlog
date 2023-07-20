@@ -1,11 +1,10 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 import config
 import stripe
-
 
 
 auth = Blueprint('auth', __name__)
@@ -93,17 +92,31 @@ def get_publishable_key():
 @auth.route('/upgradeMembership', methods=['GET', 'POST'])
 @login_required
 def upgradeMembership():
+    return render_template("upgradeMembership.html", user=current_user)
+
+
+@auth.route('/create-checkout-session', methods=['POST'])
+def create_checkout_session():
     price = request.form.get('priceId')
     domain_url = 'http://localhost:5000/'
     stripe.api_key = config.stripe_keys["secret_key"]
 
 
     try:
-        
+        # Create new Checkout Session for the order
+        # Other optional params include:
+        # [billing_address_collection] - to display billing address details on the page
+        # [customer] - if you have an existing Stripe Customer ID
+        # [customer_email] - lets you prefill the email input in the form
+        # [automatic_tax] - to automatically calculate sales tax, VAT and GST in the checkout page
+        # For full details see https://stripe.com/docs/api/checkout/sessions/create
+
+        # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=domain_url + 'canceled',
+            success_url=domain_url + '/',
+            cancel_url=domain_url + '/',
             mode='subscription',
+            # automatic_tax={'enabled': True},
             line_items=[{
                 'price': price,
                 'quantity': 1
@@ -115,7 +128,6 @@ def upgradeMembership():
 
 
 @auth.route('/webhook', methods=['POST'])
-@login_required
 def stripe_webhook():
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get("Stripe-Signature")
@@ -139,10 +151,5 @@ def stripe_webhook():
         global subscription_confirmed 
         subscription_confirmed = True
         print(subscription_confirmed)
-
-        # TODO: run some custom code here
-
-    # data = json.loads(payload)
-    # print(data['data']['object']['subscription'][0])
-    return redirect(url_for('success'))
-    
+        
+    return redirect(url_for('views.dashboard'))

@@ -17,9 +17,10 @@
                         <p>$10.00/month</p>
                     </li>
                 </ul>
-                <a href="" class="button-to-stripe">
-                    <button class="upgrade-membership-button">Upgrade to Good Subscription</button>
-                </a>
+                    <form action="/create-checkout-session" method="POST">
+                        <input type="hidden" name="priceId" value="price_1NVkZ2FO0g9fOIaC9ebXmyEc" />
+                        <button class="upgrade-membership-button" type="submit">Upgrade to Good Subscription</button>
+                    </form>
             </div>
             <div class="option-container">
                 <div class="container-title">
@@ -33,9 +34,10 @@
                         </li>
                     </li>
                 </ul>
-                <a href="" class="button-to-stripe">
-                    <button class="upgrade-membership-button">Upgrade to Better Subscription</button>
-                </a>
+                <form action="/create-checkout-session" method="POST">
+                    <input type="hidden" name="priceId" value="price_1NVkaOFO0g9fOIaCCekM3Xwd" />
+                    <button class="upgrade-membership-button" type="submit">Upgrade to Better Subscription</button>
+                </form>
             </div>
             <div class="option-container" id="best-option">
                 <div class="container-title">
@@ -49,9 +51,10 @@
                         <p>$30.00/month</p>
                     </li>
                 </ul>
-                <a href="" class="button-to-stripe">
-                    <button class="upgrade-membership-button">Upgrade to Best Subscription</button>
-                </a>
+                <form action="/create-checkout-session" method="POST">
+                    <input type="hidden" name="priceId" value="price_1NVkbcFO0g9fOIaCqhrjKbhg" />
+                    <button class="upgrade-membership-button" type="submit">Upgrade to Best Subscription</button>
+                </form>
             </div>
 
         </div>
