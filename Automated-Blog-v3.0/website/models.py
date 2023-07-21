@@ -9,6 +9,12 @@ class Blog(db.Model):
     publish_date = db.Column(db.String(150))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+class Member(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True)
+    subscription_id = db.Column(db.String(150), unique=True)
+
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)

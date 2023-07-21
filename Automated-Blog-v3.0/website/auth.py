@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify, session
+from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db   ##means from __init__.py import db
 from flask_login import login_user, login_required, logout_user, current_user
 import config
 import stripe
+from .models import Member
+
 
 
 auth = Blueprint('auth', __name__)
@@ -21,7 +23,6 @@ def login():
             if check_password_hash(user.password, password):
                 flash('Logged in successfully!', category='success')
                 login_user(user, remember=True)
-                session['user'] = user
                 return redirect(url_for('views.dashboard'))
             else:
                 flash('Incorrect password, try again.', category='error')
@@ -108,20 +109,10 @@ def create_checkout_session():
 
 
     try:
-        # Create new Checkout Session for the order
-        # Other optional params include:
-        # [billing_address_collection] - to display billing address details on the page
-        # [customer] - if you have an existing Stripe Customer ID
-        # [customer_email] - lets you prefill the email input in the form
-        # [automatic_tax] - to automatically calculate sales tax, VAT and GST in the checkout page
-        # For full details see https://stripe.com/docs/api/checkout/sessions/create
-
-        # ?session_id={CHECKOUT_SESSION_ID} means the redirect will have the session ID set as a query param
         checkout_session = stripe.checkout.Session.create(
             success_url=domain_url + '/dashboard?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=domain_url + '/dashboard',
             mode='subscription',
-            # automatic_tax={'enabled': True},
             line_items=[{
                 'price': price,
                 'quantity': 1
@@ -134,7 +125,6 @@ def create_checkout_session():
 
 @auth.route('/webhook', methods=['POST'])
 def stripe_webhook():
-    print('hello')
     payload = request.get_data(as_text=True)
     sig_header = request.headers.get("Stripe-Signature")
 
@@ -144,22 +134,25 @@ def stripe_webhook():
         )
 
     except ValueError as e:
-        # Invalid payload
         return "Invalid payload", 400
     except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
         return "Invalid signature", 400
 
-    # Handle the checkout.session.completed event
     print(event['type'])
     if event["type"] == "checkout.session.completed":
-        print("Payment was successful.")
-        print(event['data']['object']['subscription'])
-        print(event['data'])
-        print(event)
-        global subscription_confirmed 
-        subscription_confirmed = True
-        print(subscription_confirmed)
+        subscription_id = event['data']['object']['subscription']
+        member_emial = event['data']['object']['customer_details']['email']
 
+
+
+        member_to_delete = Member.query.filter_by(email=member_emial).first()
+
+        if member_to_delete:
+            db.session.delete(member_to_delete)
+            db.session.commit()
+
+        new_member = Member(email=member_emial, subscription_id=subscription_id)
+        db.session.add(new_member)
+        db.session.commit()
 
     return redirect(url_for('views.dashboard'))

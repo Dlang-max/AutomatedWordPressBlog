@@ -15,7 +15,7 @@
                             <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
                         </a>
                     </div>
-                {% else %}
+                {% elif  user.membership_level == "Free" %}
                     <div class="free-subscription-container">
                         <p align="center">You are out of free blogs. To create more, upgrade your membership.</p>
                         <a href="/upgradeMembership">
@@ -29,7 +29,7 @@
                             <p>Blog Hub</p>
                         </div>
                         <div class="blogs-remaining-container">
-                            <p>Blogs remaining this month: {{1}}</p>
+                            <p>Blogs remaining this month: {{ user.blogs_remaining_this_month }}</p>
                         </div>
                         <div class="prepublished-blogs-container">
                             <p>Prepublished Blogs:</p>
@@ -50,12 +50,13 @@
                         <div class="blogs-remaining-container">
                             <p>Current Membership Level: {{ user.membership_level }}</p>
                         </div>
+                        {% if user.membership_level == "Free" %}
                         <div class="membership-upgrade-container">
                             <a href="/upgradeMembership">
                                 <button type="submit" id="membership" class="membership" name="membership">Upgrade Membership</button>
                             </a>
-                            {{ subscription_id }}
                         </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
