@@ -29,7 +29,12 @@
                             <p>Blog Hub</p>
                         </div>
                         <div class="blogs-remaining-container">
-                            <p>Blogs remaining this month: {{ user.blogs_remaining_this_month }}</p>
+                            {% if user.membership_level != "Free" %}
+                                <p>Blogs remaining this month: {{ user.blogs_remaining_this_month }}</p>
+                            {% else %}
+                                <p>Free Blogs remaining this month: {{ user.free_blogs_remaining }}</p>
+                            {% endif %}
+
                         </div>
                         <div class="prepublished-blogs-container">
                             <p>Prepublished Blogs:</p>
