@@ -71,7 +71,13 @@ def generateBlog():
         db.session.commit()
 
         current_user.free_blogs_remaining = 0
+
+
+        if current_user.free_blogs_remaining == 0:
+            current_user.blogs_remaining_this_month -= 1
+
         db.session.commit()
+
 
 
     return render_template("generate_blog.html", user=current_user, title=title, content=content)

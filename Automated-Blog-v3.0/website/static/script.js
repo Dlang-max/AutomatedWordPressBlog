@@ -6,6 +6,14 @@ function toggleNavbar() {
   navbar.classList.toggle("show");
 }
 
+function toggleBlogHub(){
+  var svg = document.getElementById("blog-hub-arrow");
+  var container = document.getElementById("blog-info-container"); 
+
+  svg.classList.toggle("show")
+  container.classList.toggle("show")
+}
+
 /**
  * Redirects user to stripe checkout
  */

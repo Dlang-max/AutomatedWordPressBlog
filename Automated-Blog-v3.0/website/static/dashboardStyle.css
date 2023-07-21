@@ -108,6 +108,9 @@
   .prepublished-blogs-info-container{
     display: flex;
     flex-direction: row;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+
   }
 
   .blog-title-topic-info{
@@ -156,6 +159,16 @@
     color: white;
   }
 
+  .border-container{
+    display: flex;
+    flex-direction: row;
+  }
+
+  .prepublished-blogs-container{
+    display: flex;
+    flex-direction: row;
+  }
+  
 
   @media only screen and (min-width: 1024px){
     .free-subscription-container{
@@ -172,7 +185,7 @@
     }
 
     #membership-container{
-      height: 150px;
+      height: auto;
       padding: 5px; 
       align-self: flex-start;
     }

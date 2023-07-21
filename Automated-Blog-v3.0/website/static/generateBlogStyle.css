@@ -21,7 +21,12 @@
     padding: 0;
     display: flex;
     justify-content: center;
+    overflow: auto;
     height: calc(100vh + 300px);
+  }
+
+  .form-container{
+    width: 365px;
   }
 
   form{
@@ -30,11 +35,10 @@
     align-items: center;
     border: 1px solid black;
     justify-content: center;
-    padding: 10px; 
-    margin: 5px; 
+    padding: 5px; 
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, .3);
-    width: 500px; 
+    width: 350px; 
   }
 
   input{

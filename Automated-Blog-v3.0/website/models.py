@@ -8,6 +8,7 @@ class Blog(db.Model):
     blog_content = db.Column(db.String(20000))
     publish_date = db.Column(db.String(150))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    published = db.Column(db.Boolean, default=False)
 
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,5 +29,6 @@ class User(db.Model, UserMixin):
     blogs_remaining_this_month = db.Column(db.Integer, default=0)
     subscription_id = db.Column(db.String(150))
     has_paid = db.Column(db.Boolean, default=False)
+    blogs = db.db.relationship('Blog')
 
 
