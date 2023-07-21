@@ -46,6 +46,7 @@ def sign_up():
         first_name = request.form.get('firstName')
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')
+        website_username = request.form.get('wordPressUsername')
         website_url = request.form.get('websiteURL')
         app_pass_1 = request.form.get('appPassword1')
         app_pass_2 = request.form.get('appPassword2')
@@ -73,7 +74,7 @@ def sign_up():
             flash('Application passwords don\'t match.', category='error')
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
-                password1, method='sha256'), website_url=website_url, 
+                password1, method='sha256'), website_url=website_url, website_username=website_username,
                 website_application_password=generate_password_hash(app_pass_1, method='sha256'),
                 membership_level=subscription_type)
             

@@ -23,6 +23,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     first_name = db.Column(db.String(150))
     website_url = db.Column(db.String(150))
+    website_username = db.Column(db.String(150))
     website_application_password = db.Column(db.String(150))
     membership_level = db.Column(db.String(150))
     free_blogs_remaining = db.Column(db.Integer, default=1)
