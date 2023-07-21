@@ -13,19 +13,11 @@
     font-family: 'Nunito', sans-serif;
     font-size: 35px;
   }
-  
-  body {
-    color: black;
-    background-color: white;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    overflow: auto;
-    height: calc(100vh + 300px);
-  }
+
 
   .form-container{
+    display: flex;
+    justify-content: center;
     width: 365px;
   }
 
@@ -107,3 +99,9 @@
   select:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, .3);
   }
+
+  .container{
+    display: flex;
+    justify-content: center;
+  }
+
