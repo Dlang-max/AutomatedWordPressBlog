@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title %}Generate Blog{% endblock %} {% block
+    content %}
+    <link rel="stylesheet" href="static/generateBlogStyle.css">
+    <div class="container">
+        <div class="form-container">
+            <form method="POST" >
+                <h2 align="center">Generate Blog</h3>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="blog-title"
+                    name="blog-title"
+                    placeholder="Enter Blog Title"
+                    required
+                  />
+                </div>
+                <div class="form-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="additional-info"
+                      name="additional-info"
+                      placeholder="Enter Keywords, Links, or Additional Info"
+                    />
+                  </div>
+                <br />
+                  <button type="submit" class="btn btn-primary">Generate Blog</button>
+              </form>
+        </div>
+{% endblock %}
+

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="static/homeStyle.css">
+    <title>{% block title %}Welcome{% endblock %}</title>
+  </head>
+  <body>
+    <nav class="navbar">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="/sign-up" class="nav-link" id="sign-up">
+                <div class="container">
+                    <p class="creds" id="sign-up">Sign Up</p>
+                </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <div id="logo">
+              <a href="/" class="nav-link" id="home">
+                <svg id="exWabsOAHeB1" width="50" height="50" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 300 300" shape-rendering="geometricPrecision" text-rendering="geometricPrecision"><path style="mix-blend-mode:multiply" d="M101.658221,165.15959L35.261037,28.328947h84.577365l88.529579,136.830648L155.408322,275.53067L101.658221,165.159591L192.829574,28.328946l81.935592.000001-66.397185,136.830644" transform="matrix(1 0 0 1.0456-5.0131-8.06737)" fill="none" stroke="#000" stroke-width="15"/></svg>
+              </a>
+            </div>
+          </li>
+          
+          <li class="nav-item">
+            <a href="/login" class="nav-link" id="sign-in">
+                <div class="container">
+                    <p class="creds" id="sign-in">Sign In</p>
+                </div>
+            </a>
+          </li>
+        </ul>
+    </nav>
+    <main>
+      {% block content %}base{% endblock %}
+    </main>
+</body>
+</html>

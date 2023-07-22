@@ -1,0 +1,82 @@
+{% extends "home.html" %} {% block title %}Sign Up{% endblock %} {% block
+    content %}
+    <link rel="stylesheet" href="static/signUpStyle.css">
+    <form method="POST">
+      <h3 align="center">Venture</h3>
+      <div class="form-group">
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          placeholder="Enter email"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="firstName"
+          name="firstName"
+          placeholder="Enter first name"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-control"
+          id="password1"
+          name="password1"
+          placeholder="Enter password"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          class="form-control"
+          id="password2"
+          name="password2"
+          placeholder="Confirm password"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="websiteURL"
+          name="websiteURL"
+          placeholder="Enter website URL"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="wordPressUsername"
+          name="wordPressUsername"
+          placeholder="Enter Username for Wordpress Website"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="appPassword1"
+          name="appPassword1"
+          placeholder="Enter application password"
+        />
+      </div>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="appPassword2"
+          name="appPassword2"
+          placeholder="Confirm application password"
+        />
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary">Sign Up</button>
+    </form>
+    {% endblock %}
+    
