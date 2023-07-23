@@ -3,8 +3,34 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="static/homeStyle.css">
     <title>{% block title %}Home{% endblock %}</title>
   </head>
   <body>
+    <nav class="navbar" id="navbar">
+      <div class="brand-title">AutoBlog</div>
+
+      <a href="#" class="toggle-button" id="toggle-button">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+      </a>
+
+      <div class="navbar-links">
+          <ul>
+              <li>
+                  <a href="/">Home</a>
+              </li>
+              <li>
+                  <a href="#">About Us</a>
+              </li>
+              <li>
+                  <a href="/logout">Log out</a>
+              </li>
+          </ul>
+      </div>
+  </nav>
+  <script src="static/script.js"></script>
+    {% block content %}{%endblock%}
 </body>
 </html>
