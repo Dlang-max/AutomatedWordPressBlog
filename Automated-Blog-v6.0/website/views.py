@@ -57,45 +57,43 @@ def generateBlog():
     title = ''
 
     if request.method == 'POST':
-        title = request.form.get('blog-title')
-        additional_information = request.form.get('additional-information')
+        if 'blog-title' in request.form :
+            title = request.form.get('blog-title')
+            additional_information = request.form.get('additional-information')
 
-        # outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
-        # content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)          
+            outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
+            content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)   
+            
+            current_user.free_blogs_remaining = 0
+            if current_user.free_blogs_remaining == 0:
+                current_user.blogs_remaining_this_month -= 1
 
-        content = 'Hello, World!'
+            db.session.commit()       
 
-        # new_blog = Blog(blog_title=title, blog_content=content)
-        # db.session.add(new_blog)
-        # db.session.commit()
-
-        current_user.free_blogs_remaining = 0
+        if 'div_content' in request.form:
+            content = request.form.get('div_content')
+            print(content)
 
 
-        if current_user.free_blogs_remaining == 0:
-            current_user.blogs_remaining_this_month -= 1
+        # url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
 
-        db.session.commit()
+        # user = current_user.website_username
+        # password = current_user.website_application_password
 
-        url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
+        # creds = user + ':' + password
 
-        user = current_user.website_username
-        password = current_user.website_application_password
+        # token = base64.b64encode(creds.encode())
 
-        creds = user + ':' + password
+        # header = {'Authorization': 'Basic ' + token.decode('utf-8')}
 
-        token = base64.b64encode(creds.encode())
+        # post = {
+        #     'title': title,
+        #     'content': content,
+        #     'status': 'publish'
+        # }
 
-        header = {'Authorization': 'Basic ' + token.decode('utf-8')}
-
-        post = {
-            'title': title,
-            'content': content,
-            'status': 'publish'
-        }
-
-        r = requests.post(url, headers=header, json=post)
-        print(r)
+        # r = requests.post(url, headers=header, json=post)
+        # print(r)
 
 
     return render_template("generate_blog.html", user=current_user, title=title, content=content)

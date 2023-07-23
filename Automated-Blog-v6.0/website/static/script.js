@@ -5,6 +5,18 @@ toggleButton.addEventListener('click', () => {
   navbarLinks.classList.toggle('active');
 });
 
+function captureDivContent() {
+  const divContent = document.getElementById('generated').innerHTML;
+  document.getElementById('divContentInput').value = divContent;
+}
+
+// Submit the form when the button is clicked
+document.getElementById('generated-content').addEventListener('submit', function (event) {
+  event.preventDefault(); // Prevent default form submission
+  captureDivContent();    // Capture div content and set the hidden input value
+  this.submit();          // Submit the form
+});
+
 
 /**
  * Redirects user to stripe checkout

@@ -2,6 +2,7 @@ main{
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 form{
@@ -15,6 +16,11 @@ form{
   width: 80%;
   border-radius: 10px;
   padding: 1rem;
+}
+
+.generated-content-container
+{
+  height: 50%;
 }
 
 .form-group{
@@ -61,5 +67,9 @@ button:hover{
 @media (min-width: 1000px){
   form{
     width: 400px;
+  }
+
+  #generated-content{
+    width: 800px;
   }
 }
