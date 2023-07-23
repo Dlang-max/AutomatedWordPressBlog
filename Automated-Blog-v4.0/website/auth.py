@@ -75,7 +75,7 @@ def sign_up():
         else:
             new_user = User(email=email, first_name=first_name, password=generate_password_hash(
                 password1, method='sha256'), website_url=website_url, website_username=website_username,
-                website_application_password=generate_password_hash(app_pass_1, method='sha256'),
+                website_application_password=app_pass_1,
                 membership_level=subscription_type)
             
 

@@ -7,6 +7,8 @@ import json
 import BlogWriter
 import config
 import stripe
+import base64
+import requests
 
 views = Blueprint('views', __name__)
 
@@ -58,21 +60,42 @@ def generateBlog():
         title = request.form.get('blog-title')
         additional_information = request.form.get('additional-information')
 
-        outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
-        content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)          
+        # outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
+        # content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)          
+
+        content = 'Hello, World!'
 
         # new_blog = Blog(blog_title=title, blog_content=content)
         # db.session.add(new_blog)
         # db.session.commit()
 
-        # current_user.free_blogs_remaining = 0
+        current_user.free_blogs_remaining = 0
 
 
-        # if current_user.free_blogs_remaining == 0:
-        #     current_user.blogs_remaining_this_month -= 1
+        if current_user.free_blogs_remaining == 0:
+            current_user.blogs_remaining_this_month -= 1
 
-        # db.session.commit()
+        db.session.commit()
 
+        url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
+
+        user = current_user.website_username
+        password = current_user.website_application_password
+
+        creds = user + ':' + password
+
+        token = base64.b64encode(creds.encode())
+
+        header = {'Authorization': 'Basic ' + token.decode('utf-8')}
+
+        post = {
+            'title': title,
+            'content': content,
+            'status': 'publish'
+        }
+
+        r = requests.post(url, headers=header, json=post)
+        print(r)
 
 
     return render_template("generate_blog.html", user=current_user, title=title, content=content)
@@ -86,3 +109,4 @@ def generateBlog():
 #         return None
 #     return config.prices['']
 
+# w3bP wuqE RA8B Zg9Y kBs8 TLuX
