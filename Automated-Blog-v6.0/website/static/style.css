@@ -1,0 +1,153 @@
+:root {
+    font-size: 16px;
+    font-family: 'Open Sans';
+    --text-primary: #b6b6b6;
+    --text-secondary: #ececec;
+    --bg-primary: #23232e;
+    --bg-secondary: #141418;
+    --transition-speed: 600ms;
+  }
+  
+  body {
+    overflow-x: hidden;
+    color: black;
+    background-color: white;
+    margin: 0;
+    padding: 0; 
+    height: 100vh;
+    width: 100vw; 
+  }
+  
+  body::-webkit-scrollbar {
+    width: 0.25rem;
+  }
+  
+  body::-webkit-scrollbar-track {
+    background: #1e1e24;
+  }
+  
+  body::-webkit-scrollbar-thumb {
+    background: #6649b8;
+  }
+  
+  main {
+    margin-bottom: 5rem;
+    padding: 1rem;
+    margin: 10px; 
+  }
+  .side-navbar{
+    width: 10rem;
+    height: 100vh;
+    position: fixed;
+    background-color: var(--bg-primary);
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+  }
+  .navbar{
+    width: 100vw;
+    height: 5rem;
+    position: fixed;
+    background-color: var(--bg-primary);
+    bottom: 0;
+    left: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+
+  }
+  .side-navbar{
+    position: fixed;
+    width: 0;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s;
+    transition: width 0.3s;
+    top: 0; 
+    bottom: 0;
+    height: 100%;
+  }
+
+  #close-button{
+    cursor: pointer;
+  }
+
+  .side-navbar-nav{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100%;
+  }
+
+  .side-navbar.show {
+    width: 10rem;
+    opacity: 1;
+  }
+
+  .navbar-nav{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+  }
+
+  #close{
+    margin-left: 120px;
+    border: 1px solid black;
+    padding: 3px;
+    border-radius: 10px;
+    background-color: #404067; 
+  }
+  
+  .navbar-item{
+    width: 100%;
+  }
+
+  svg{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 1rem;
+    filter: grayscale(100%) opacity(0.5);
+    transition: var(--transition-speed);
+  }
+
+  svg:hover{
+    filter: grayscale(0%) opacity(1);
+  }
+
+  .nav-item:last-child{
+    margin-top: auto;
+  }
+
+  .content-container{
+    height: 100vh; 
+  }
+
+  
+
+  @media only screen and (min-width: 1024px){
+    main{
+        margin-bottom: 0;
+    }
+    .navbar{
+      margin-left: auto;
+      width: 5rem;
+      height: 100vh;
+      background-color: var(--bg-primary);
+      top: 0;
+      right: 0;
+      position: fixed;
+    }
+
+    .navbar-nav{
+      flex-direction: column;
+    }
+  }
+

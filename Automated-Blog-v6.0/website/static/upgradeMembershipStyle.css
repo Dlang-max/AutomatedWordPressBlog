@@ -1,0 +1,77 @@
+:root {
+    font-size: 16px;
+    font-family: 'Open Sans';
+    --text-primary: #b6b6b6;
+    --text-secondary: #ececec;
+    --bg-primary: #23232e;
+    --bg-secondary: #141418;
+    --transition-speed: 600ms;
+  }
+
+  main{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px;
+    padding: 20px; 
+    overflow: auto;
+    background-color: white;
+    height: calc(100vh + 200px);
+  }
+
+  .option-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 5px; 
+    margin-top: 10px; 
+    margin-bottom: 10px; 
+    width: calc(100vw - 6rem);
+    border: 1px solid black;
+    border-radius: 5px;
+    transition: box-shadow 0.3s;
+    overflow: auto;
+  }
+
+  .option-container:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3);
+  }
+
+  .upgrade-membership-button{
+    background-color: var(--bg-primary);
+    border-radius: 100px;
+    color: var(--text-primary);
+    transition: box-shadow 0.3s;
+    transition: color 0.3s;
+    cursor: pointer;
+    padding: 20px; 
+  }
+
+  .upgrade-membership-button:hover{
+    box-shadow: 0 0 10px rgba(0, 0, 0, .3); 
+    color: white;
+  }
+
+  @media only screen and (min-width: 1024px){
+    .membership-tier-container{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .option-container{
+        justify-content: center;
+        align-items: center;
+        width: calc(100vw / 3 - 5rem);
+        margin: 1rem;
+    }
+
+    #best-option{
+        margin-right: 5rem;
+    }
+
+    main{
+       height: 100vh;
+    }
+  }
+

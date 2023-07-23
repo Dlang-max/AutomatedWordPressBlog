@@ -1,0 +1,40 @@
+{% extends "home.html" %} {% block title %}Sign Up{% endblock %} {% block
+    content %}
+    <link rel="stylesheet" href="static/signUpStyle.css">
+    <main>
+      <form method="POST">
+        <h3 align="center">AutoBlog</h3>
+        <div class="form-group">
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            name="email"
+            placeholder="Enter email"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="password1"
+            name="password1"
+            placeholder="Enter password"
+          />
+        </div>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="password2"
+            name="password2"
+            placeholder="Confirm password"
+          />
+        </div>
+        <p align="center">Already Have an Accout? <a href="/login">Login</a></p>
+        <br />
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+      </form>
+    </main>
+    {% endblock %}
+    
