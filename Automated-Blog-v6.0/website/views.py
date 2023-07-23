@@ -53,7 +53,7 @@ def dashboard():
 @views.route('/generate-blog', methods=['GET', 'POST'])
 @login_required
 def generateBlog():
-    content = ''
+    content = 'nothing'
     title = ''
 
     if request.method == 'POST':

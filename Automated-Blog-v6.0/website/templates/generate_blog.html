@@ -2,49 +2,44 @@
     content %}
     <link rel="stylesheet" href="static/generateBlogStyle.css">
     <main>
-      <!-- {% if user.blogs_remaining_this_month > 0 or user.free_blogs_remaining > 0 %} -->
-        {% if content == '' %}
-          <form method="post" name="generate">
-              <h2 align="center">Generate Blog</h3>
-              <div class="form-group">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="blog-title"
-                  name="blog-title"
-                  placeholder="Enter Blog Title"
-                  required
-                />
-              </div>
-              <div class="form-group">
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="additional-info"
-                    name="additional-info"
-                    placeholder="Enter Keywords, Links, or Other Info"
-                  />
-                </div>
-              <br />
-                <button type="submit" class="btn btn-primary">Generate Blog</button>
-            </form>
-        {%else%}
-              <form method="post" id="generated-content" name="generated">
-                <h2 align="center">Generated Content</h3>
-                <div class="generated-content-container" id="generated" name="generated-content" contenteditable>
-                  {{content | safe}} 
-                </div>
-                <input type="hidden" name="div_content" id="divContentInput">
-                <br />
-                  <button type="submit" class="btn btn-primary">Publish to WordPress</button>
-              </form>
-          {% endif %}
-                
-      <!-- {% else %}
-        <form method="POST" action="/upgradeMembership">
-            <button type="submit" class="btn btn-primary">Upgrade Membership for More Blogs</button>
-        </form>
+    {% if content == 'nothing' %}
+    <form method="post" name="generate">
+        <h2 align="center">Generate Blog</h3>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            id="blog-title"
+            name="blog-title"
+            placeholder="Enter Blog Title"
+            required
+          />
+        </div>
+        <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              id="additional-info"
+              name="additional-info"
+              placeholder="Enter Keywords, Links, or Other Info"
+            />
+          </div>
+        <br />
+          <button type="submit" class="btn btn-primary">Generate Blog</button>
+      </form>
+      {% else %}
+      <!-- {% if wants_to_link_wordpress %}
       {% endif %} -->
+      <form method="post" id="generated-content" name="generated">
+        <h2 align="center">Generated Content</h3>
+        <div class="generated-content-container" id="generated" name="generated-content" contenteditable>
+          {{content | safe}} 
+        </div>
+        <input type="hidden" name="div_content" id="divContentInput">
+        <br />
+          <button type="submit" class="btn btn-primary">Publish to WordPress</button>
+      </form>
+      {% endif %}
       </main>
         
 {% endblock %}
