@@ -18,6 +18,14 @@
 
       <div class="navbar-links">
           <ul>
+            {% if user.email %}
+            <li>
+              <a href="/">Profile</a>
+            </li>
+            <li>
+              <a href="/generate-blog">Create</a>
+            </li>
+            {% endif %}
             <li>
               <a href="/">Home</a>
             </li>
@@ -25,7 +33,11 @@
                 <a href="#">About Us</a>
             </li>
             <li>
+              {% if user.email %}
                 <a href="/logout">Log out</a>
+              {% else %}
+              <a href="/logout">Sign Up</a>
+              {% endif %}
             </li>
           </ul>
       </div>
