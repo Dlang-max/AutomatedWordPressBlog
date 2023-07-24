@@ -6,9 +6,7 @@ class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     blog_title = db.Column(db.String(150))
     blog_content = db.Column(db.String(20000))
-    publish_date = db.Column(db.String(150))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    published = db.Column(db.Boolean, default=False)
 
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)

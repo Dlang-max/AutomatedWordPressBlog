@@ -57,26 +57,55 @@ def generateBlog():
             title = request.form.get('blog-title')
             additional_information = request.form.get('additional-information')
 
-            # outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
-            # content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
+            outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
+            content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
 
-            session['title'] = title
-            session['content'] = content  
-            
-            print(session['content'])
-
+            new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id)
+            db.session.add(new_blog)
+            db.session.commit()
 
             current_user.free_blogs_remaining = 0
             if current_user.free_blogs_remaining == 0:
                 current_user.blogs_remaining_this_month -= 1
             db.session.commit()    
-            return render_template("generate_blog.html", user=current_user, title='', content=session['content'], wants_to_link_wordpress=False)
+
+
+
+            return render_template("generate_blog.html", user=current_user, title=title, content=content, wants_to_link_wordpress=False)
 
 
         if 'div_content' in request.form:
             if current_user.website_url == '':
-                return render_template("generate_blog.html", user=current_user, title=session['title'], content='', wants_to_link_wordpress=True)
-            return render_template("generate_blog.html", user=current_user, title=session['title'], content='', wants_to_link_wordpress=False)
+                blog = db.session.query(Blog).first()
+                return render_template("generate_blog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+            
+            url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
+
+            user = current_user.website_username
+            password = current_user.website_application_password
+
+            creds = user + ':' + password
+
+            token = base64.b64encode(creds.encode())
+
+            header = {'Authorization': 'Basic ' + token.decode('utf-8')}
+
+            blog = db.session.query(Blog).first()
+
+            post = {
+                'title': blog.blog_title,
+                'content': blog.blog_content,
+                'status': 'publish'
+            }
+
+            r = requests.post(url, headers=header, json=post)
+            print(r)
+
+
+            db.session.delete(blog)
+            db.session.commit()
+
+            return render_template("generate_blog.html", user=current_user, title='', content='', wants_to_link_wordpress=False)
 
 
         if 'websiteURL' in request.form:
@@ -88,7 +117,11 @@ def generateBlog():
             current_user.website_username = website_username
             current_user.website_application_password = website_application_password
             db.session.commit()   
-            return render_template("generate_blog.html", user=current_user, title=session['title'], content=session['content'], wants_to_link_wordpress=False)
+
+            blog = db.session.query(Blog).first()
+
+
+            return render_template("generate_blog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
 
 
         
@@ -127,3 +160,5 @@ def generateBlog():
 #     return config.prices['']
 
 # w3bP wuqE RA8B Zg9Y kBs8 TLuX
+
+

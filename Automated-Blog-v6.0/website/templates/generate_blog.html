@@ -28,7 +28,7 @@
           <button type="submit" class="btn btn-primary">Generate Blog</button>
       </form>
       {% else %}
-          {% if user.website_url == '' %}
+          {% if wants_to_link_wordpress and user.website_url == '' %}
             <form method="post" id="link-wordpress" name="link-wordpress">
               <h2 align="center">Link to WordPress Website</h3>
               <div class="form-group">
