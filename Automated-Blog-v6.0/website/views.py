@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, flash, jsonify
+from flask import Blueprint, render_template, request, flash, jsonify, session
 from flask_login import login_required, current_user
 from .models import Blog
 from .models import Member
@@ -11,7 +11,6 @@ import base64
 import requests
 
 views = Blueprint('views', __name__)
-
 
 @views.route('/', methods=['GET', 'POST'])
 def home():
@@ -53,26 +52,46 @@ def dashboard():
 @views.route('/generate-blog', methods=['GET', 'POST'])
 @login_required
 def generateBlog():
-    content = 'nothing'
-    title = ''
-
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
             additional_information = request.form.get('additional-information')
 
-            outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
-            content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)   
+            # outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
+            # content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
+
+            session['title'] = title
+            session['content'] = content  
             
+            print(session['content'])
+
+
             current_user.free_blogs_remaining = 0
             if current_user.free_blogs_remaining == 0:
                 current_user.blogs_remaining_this_month -= 1
+            db.session.commit()    
+            return render_template("generate_blog.html", user=current_user, title='', content=session['content'], wants_to_link_wordpress=False)
 
-            db.session.commit()       
 
         if 'div_content' in request.form:
-            content = request.form.get('div_content')
-            print(content)
+            if current_user.website_url == '':
+                return render_template("generate_blog.html", user=current_user, title=session['title'], content='', wants_to_link_wordpress=True)
+            return render_template("generate_blog.html", user=current_user, title=session['title'], content='', wants_to_link_wordpress=False)
+
+
+        if 'websiteURL' in request.form:
+            website_url = request.form.get('websiteURL')
+            website_username = request.form.get('wordPressUsername')
+            website_application_password = request.form.get('appPassword1')
+
+            current_user.website_url = website_url
+            current_user.website_username = website_username
+            current_user.website_application_password = website_application_password
+            db.session.commit()   
+            return render_template("generate_blog.html", user=current_user, title=session['title'], content=session['content'], wants_to_link_wordpress=False)
+
+
+        
 
 
         # url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
@@ -96,7 +115,7 @@ def generateBlog():
         # print(r)
 
 
-    return render_template("generate_blog.html", user=current_user, title=title, content=content)
+    return render_template("generate_blog.html", user=current_user, title='', content='', wants_to_link_wordpress=False)
 
 # def getMembershipLevel(subscription_id):
 #     try:
