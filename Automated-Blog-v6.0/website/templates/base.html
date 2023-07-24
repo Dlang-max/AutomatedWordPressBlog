@@ -8,7 +8,7 @@
   </head>
   <body>
     <nav class="navbar" id="navbar">
-      <div class="brand-title">AutoBlog</div>
+      <a href="/"><div class="brand-title">AutoBlog</div></a>
 
       <a href="#" class="toggle-button" id="toggle-button">
           <span class="bar"></span>
@@ -25,18 +25,19 @@
             <li>
               <a href="/generate-blog">Create</a>
             </li>
-            {% endif %}
+            {% else %}
             <li>
               <a href="/">Home</a>
             </li>
             <li>
-                <a href="#">About Us</a>
+                <a href="#">About</a>
             </li>
+            {% endif %}
             <li>
               {% if user.email %}
                 <a href="/logout">Log out</a>
               {% else %}
-              <a href="/logout">Sign Up</a>
+              <a href="/logout">Join</a>
               {% endif %}
             </li>
           </ul>
