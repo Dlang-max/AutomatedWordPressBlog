@@ -11,6 +11,9 @@
     text-decoration: none;
     color: white;
   }
+  #logo{
+    color: white;
+  }
   body {
     overflow-x: hidden;
     color: black;
