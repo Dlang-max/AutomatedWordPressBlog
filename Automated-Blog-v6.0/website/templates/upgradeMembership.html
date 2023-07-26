@@ -5,6 +5,22 @@
     <link rel="stylesheet" href="static/upgradeMembershipStyle.css">
     <main>
         <div class="membership-tier-container">
+
+
+
+
+
+
+            {% if user.membership_level != 'Free' %}
+            <div class="option-container">
+                <div class="container-title">
+                    <h4 align="center">Cancel Membership</h4>
+                </div>
+                    <form action="/cancelMembership" method="POST">
+                        <button class="upgrade-membership-button" type="submit">Cancel</button>
+                    </form>
+            </div>
+            {% endif %}
             <div class="option-container">
                 <div class="container-title">
                     <h4 align="center">Good</h4>
@@ -13,7 +29,11 @@
                     <p>$10.00/month</p>
                     <form action="/create-checkout-session" method="POST">
                         <input type="hidden" name="priceId" value="price_1NVkZ2FO0g9fOIaC9ebXmyEc" />
-                        <button class="upgrade-membership-button" type="submit">Upgrade to Good Subscription</button>
+                        {% if user.membership_level == 'Good' %}
+                            <button class="upgrade-membership-button" type="submit" disabled>Current Membership</button>
+                        {% else %}
+                            <button class="upgrade-membership-button" type="submit">Upgrade to Good Subscription</button>
+                        {% endif %}
                     </form>
             </div>
             <div class="option-container">
@@ -24,7 +44,11 @@
                 <p>$20.00/month</p>
                 <form action="/create-checkout-session" method="POST">
                     <input type="hidden" name="priceId" value="price_1NVkaOFO0g9fOIaCCekM3Xwd" />
-                    <button class="upgrade-membership-button" type="submit">Upgrade to Better Subscription</button>
+                    {% if user.membership_level == 'Better' %}
+                        <button class="upgrade-membership-button" type="submit" disabled>Current Membership</button>
+                    {% else %}
+                        <button class="upgrade-membership-button" type="submit">Upgrade to Better Subscription</button>
+                    {% endif %}
                 </form>
             </div>
             <div class="option-container" id="best-option">
@@ -35,7 +59,11 @@
                 <p>$30.00/month</p>
                 <form action="/create-checkout-session" method="POST">
                     <input type="hidden" name="priceId" value="price_1NVkbcFO0g9fOIaCqhrjKbhg" />
+                    {% if user.membership_level == 'Best' %}
+                    <button class="upgrade-membership-button" type="submit" disabled>Current Membership</button>
+                    {% else %}
                     <button class="upgrade-membership-button" type="submit">Upgrade to Best Subscription</button>
+                    {% endif %}
                 </form>
             </div>
 

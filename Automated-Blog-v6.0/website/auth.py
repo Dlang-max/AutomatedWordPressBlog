@@ -84,6 +84,20 @@ def get_publishable_key():
 def upgradeMembership():
     return render_template("upgradeMembership.html", user=current_user)
 
+@auth.route('/cancelMembership', methods=['GET', 'POST'])
+@login_required
+def cancelMembership():
+    stripe.api_key = config.stripe_keys["secret_key"]
+    stripe.Subscription.delete(current_user.subscription_id)
+
+
+
+
+    current_user.subscription_id = ''
+    current_user.membership_level = 'Free'
+    db.session.commit()
+
+    return render_template("profile.html", user=current_user)
 
 @auth.route('/create-checkout-session', methods=['POST'])
 @login_required
@@ -139,6 +153,7 @@ def stripe_webhook():
         member_to_delete = Member.query.filter_by(stripe_id=stripe_id).first()
 
         if member_to_delete:
+            stripe.Subscription.delete(member_to_delete.subscription_id)
             db.session.delete(member_to_delete)
             db.session.commit()
 

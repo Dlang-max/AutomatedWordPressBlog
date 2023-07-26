@@ -63,3 +63,7 @@ li{
   background-color: #2864b9;
 }
 
+.option-container button:disabled{
+  background-color: #458eff;
+}
+

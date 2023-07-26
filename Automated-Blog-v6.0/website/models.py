@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     website_url = db.Column(db.String(150), default='')
     website_username = db.Column(db.String(150))
     website_application_password = db.Column(db.String(150))
-    membership_level = db.Column(db.String(150))
+    membership_level = db.Column(db.String(150), default='Free')
     free_blogs_remaining = db.Column(db.Integer, default=1)
     blogs_remaining_this_month = db.Column(db.Integer, default=0)
     subscription_id = db.Column(db.String(150))

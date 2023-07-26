@@ -20,6 +20,11 @@ def home():
 def base():
     return render_template("base.html", user=current_user)
 
+@views.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    return render_template("profile.html", user=current_user)
+
 @views.route('/generate-blog', methods=['GET', 'POST'])
 @login_required
 def generateBlog():
@@ -37,7 +42,7 @@ def generateBlog():
         
         current_user.subscription_id = subscription_id
         current_user.membership_level = membership_level
-        current_user.blogs_remaining_this_month = config.blogs_with_membership[membership_level]
+        current_user.blogs_remaining_this_month = current_user.blogs_remaining_this_month + config.blogs_with_membership[membership_level]
         current_user.has_paid = True
         db.session.commit()
 
