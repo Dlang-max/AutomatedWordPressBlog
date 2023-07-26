@@ -51,6 +51,12 @@ button{
   color: white;
 }
 
+button:disabled:hover{
+  background-color: #458eff;
+
+}
+
+
 p{
   font-size: 14px;
 }

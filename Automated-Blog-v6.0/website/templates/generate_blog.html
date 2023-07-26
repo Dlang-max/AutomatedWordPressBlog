@@ -2,8 +2,11 @@
     content %}
     <link rel="stylesheet" href="static/generateBlogStyle.css">
     <main>
+    Free Blogs: {{ user.free_blogs_remaining }}
+    Paid Blogs: {{ user.blogs_remaining_this_month }}
+    {% if user.free_blogs_remaining > 0 or user.blogs_remaining_this_month > 0 or generate %}
     {% if content == '' %}
-    <form method="post" name="generate">
+    <form method="post" name="generate" id="generate">
         <h2 align="center">Generate Blog</h3>
         <div class="form-group">
           <input
@@ -25,7 +28,7 @@
             />
           </div>
         <br />
-          <button type="submit" class="btn btn-primary">Generate Blog</button>
+        <button type="submit" id="generate-button" class="btn btn-primary">Generate Blog</button>
       </form>
       {% else %}
           {% if wants_to_link_wordpress and user.website_url == '' %}
@@ -81,6 +84,13 @@
         <br />
           <button type="submit" class="btn btn-primary">Publish to WordPress</button>
       </form>
+    {% endif %}
+    {% else %}
+    <form action="/upgradeMembership">
+      <h2 align="center">Upgrade Membership for More</h3>
+      <br />
+        <button type="submit" class="btn btn-primary">Upgrade Membership</button>
+    </form>
     {% endif %}
       </main>
         

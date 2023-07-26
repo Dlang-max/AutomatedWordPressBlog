@@ -12,6 +12,7 @@ class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     subscription_id = db.Column(db.String(150), unique=True)
+    stripe_id = db.Column(db.String(150), unique=True)
 
 
 
@@ -27,6 +28,7 @@ class User(db.Model, UserMixin):
     blogs_remaining_this_month = db.Column(db.Integer, default=0)
     subscription_id = db.Column(db.String(150))
     has_paid = db.Column(db.Boolean, default=False)
+    stripe_id = db.Column(db.String(150), unique=True)
     blogs = db.db.relationship('Blog')
 
 

@@ -20,15 +20,13 @@ def home():
 def base():
     return render_template("base.html", user=current_user)
 
-@views.route('/dashboard', methods=['GET', 'POST'])
+@views.route('/generate-blog', methods=['GET', 'POST'])
 @login_required
-def dashboard():
-    email = current_user.email
-    member = Member.query.filter_by(email=email).first()
+def generateBlog():
+    stripe_id = current_user.stripe_id
+    member = Member.query.filter_by(stripe_id=stripe_id).first()
     if member:
         subscription_id = member.subscription_id
-        
-
         try:
             subscription = stripe.Subscription.retrieve(subscription_id)
             print(subscription)
@@ -43,15 +41,10 @@ def dashboard():
         current_user.has_paid = True
         db.session.commit()
 
-        member_to_delete = Member.query.filter_by(email=email).first()
+        member_to_delete = Member.query.filter_by(stripe_id=stripe_id).first()
         db.session.delete(member_to_delete)
         db.session.commit()
 
-    return render_template("dashboard.html", user=current_user) 
-
-@views.route('/generate-blog', methods=['GET', 'POST'])
-@login_required
-def generateBlog():
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
@@ -64,20 +57,22 @@ def generateBlog():
             db.session.add(new_blog)
             db.session.commit()
 
-            current_user.free_blogs_remaining = 0
             if current_user.free_blogs_remaining == 0:
                 current_user.blogs_remaining_this_month -= 1
+
+            current_user.free_blogs_remaining = 0
+            
             db.session.commit()    
 
 
 
-            return render_template("generate_blog.html", user=current_user, title=title, content=content, wants_to_link_wordpress=False)
+            return render_template("generate_blog.html", generating=True, generate=True, user=current_user, title=title, content=content, wants_to_link_wordpress=False)
 
 
         if 'div_content' in request.form:
             if current_user.website_url == '':
                 blog = db.session.query(Blog).first()
-                return render_template("generate_blog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+                return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
             
             url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
 
@@ -105,7 +100,7 @@ def generateBlog():
             db.session.delete(blog)
             db.session.commit()
 
-            return render_template("generate_blog.html", user=current_user, title='', content='', wants_to_link_wordpress=False)
+            return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
 
         if 'websiteURL' in request.form:
@@ -121,34 +116,9 @@ def generateBlog():
             blog = db.session.query(Blog).first()
 
 
-            return render_template("generate_blog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
+            return render_template("generate_blog.html", generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
 
-
-        
-
-
-        # url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
-
-        # user = current_user.website_username
-        # password = current_user.website_application_password
-
-        # creds = user + ':' + password
-
-        # token = base64.b64encode(creds.encode())
-
-        # header = {'Authorization': 'Basic ' + token.decode('utf-8')}
-
-        # post = {
-        #     'title': title,
-        #     'content': content,
-        #     'status': 'publish'
-        # }
-
-        # r = requests.post(url, headers=header, json=post)
-        # print(r)
-
-
-    return render_template("generate_blog.html", user=current_user, title='', content='', wants_to_link_wordpress=False)
+    return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
 # def getMembershipLevel(subscription_id):
 #     try:
@@ -160,5 +130,6 @@ def generateBlog():
 #     return config.prices['']
 
 # w3bP wuqE RA8B Zg9Y kBs8 TLuX
+
 
 

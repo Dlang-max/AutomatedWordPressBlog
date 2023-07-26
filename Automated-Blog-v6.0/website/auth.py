@@ -95,14 +95,19 @@ def create_checkout_session():
 
     try:
         checkout_session = stripe.checkout.Session.create(
-            success_url=domain_url + '/generate_blog?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=domain_url + '/generate_blog',
+            success_url=domain_url + '/generate-blog',
+            cancel_url=domain_url + '/generate-blog',
             mode='subscription',
             line_items=[{
                 'price': price,
                 'quantity': 1
             }],
         )
+
+        current_user.stripe_id = checkout_session['id']
+        db.session.commit()
+        print(current_user.stripe_id)
+
         return redirect(checkout_session.url, code=303)
     except Exception as e:
         return jsonify({'error': {'message': str(e)}}), 400
@@ -123,20 +128,21 @@ def stripe_webhook():
     except stripe.error.SignatureVerificationError as e:
         return "Invalid signature", 400
 
-    print(event['type'])
     if event["type"] == "checkout.session.completed":
         subscription_id = event['data']['object']['subscription']
         member_emial = event['data']['object']['customer_details']['email']
+        stripe_id = event['data']['object']['id']
 
 
 
-        member_to_delete = Member.query.filter_by(email=member_emial).first()
+
+        member_to_delete = Member.query.filter_by(stripe_id=stripe_id).first()
 
         if member_to_delete:
             db.session.delete(member_to_delete)
             db.session.commit()
 
-        new_member = Member(email=member_emial, subscription_id=subscription_id)
+        new_member = Member(email=member_emial, subscription_id=subscription_id, stripe_id=stripe_id)
         db.session.add(new_member)
         db.session.commit()
 

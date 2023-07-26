@@ -10,6 +10,16 @@ function captureDivContent() {
   document.getElementById('divContentInput').value = divContent;
 }
 
+document.getElementById('generate').addEventListener('submit', function (event) {
+  event.preventDefault();
+  var button = document.getElementById('generate-button');
+
+  button.disabled = true;
+  button.innerHTML = "Generating...";
+  event.target.submit();
+});
+
+
 // Submit the form when the button is clicked
 document.getElementById('generated-content').addEventListener('submit', function (event) {
   event.preventDefault(); // Prevent default form submission
