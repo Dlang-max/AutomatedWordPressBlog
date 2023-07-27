@@ -7,6 +7,7 @@
     {% if user.free_blogs_remaining > 0 or user.blogs_remaining_this_month > 0 or generate %}
     {% if content == '' %}
     <form method="post" name="generate" id="generate">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h2 align="center">Generate Blog</h3>
         <div class="form-group">
           <input
@@ -33,6 +34,7 @@
       {% else %}
           {% if wants_to_link_wordpress and user.website_url == '' %}
             <form method="post" id="link-wordpress" name="link-wordpress">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <h2 align="center">Link to WordPress Website</h3>
               <div class="form-group">
                 <input
@@ -76,6 +78,7 @@
             </form>
           {% endif %}
       <form method="post" id="generated-content" name="generated">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h2 align="center">Generated Content</h3>
         <div class="generated-content-container" id="generated" name="generated-content" contenteditable>
           {{content | safe}}
@@ -87,12 +90,25 @@
     {% endif %}
     {% else %}
     <form action="/upgradeMembership">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <h2 align="center">Upgrade Membership for More</h3>
       <br />
         <button type="submit" class="btn btn-primary">Upgrade Membership</button>
     </form>
     {% endif %}
       </main>
+      <script>
+        document.getElementById('generated-content').addEventListener('submit', function (event) {
+          event.preventDefault(); 
+          captureDivContent();    
+          this.submit();         
+        });
+
+        function captureDivContent() {
+          const divContent = document.getElementById('generated').innerHTML;
+          document.getElementById('divContentInput').value = divContent;
+        }
+      </script>
         
 {% endblock %}
 

@@ -5,10 +5,10 @@ toggleButton.addEventListener('click', () => {
   navbarLinks.classList.toggle('active');
 });
 
-function captureDivContent() {
-  const divContent = document.getElementById('generated').innerHTML;
-  document.getElementById('divContentInput').value = divContent;
-}
+// function captureDivContent() {
+//   const divContent = document.getElementById('generated').innerHTML;
+//   document.getElementById('divContentInput').value = divContent;
+// }
 
 document.getElementById('generate').addEventListener('submit', function (event) {
   event.preventDefault();
@@ -20,12 +20,11 @@ document.getElementById('generate').addEventListener('submit', function (event) 
 });
 
 
-// Submit the form when the button is clicked
-document.getElementById('generated-content').addEventListener('submit', function (event) {
-  event.preventDefault(); // Prevent default form submission
-  captureDivContent();    // Capture div content and set the hidden input value
-  this.submit();          // Submit the form
-});
+// document.getElementById('generated-content').addEventListener('submit', function (event) {
+//   event.preventDefault(); 
+//   captureDivContent();    
+//   this.submit();         
+// });
 
 
 /**

@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="static/signInStyle.css">
     <main>
       <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
         <h3 align="center">AutoBlog</h3>
         <div class="form-group">
           <input

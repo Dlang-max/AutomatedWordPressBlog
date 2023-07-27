@@ -17,6 +17,7 @@
                     <h4 align="center">Cancel Membership</h4>
                 </div>
                     <form action="/cancelMembership" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <button class="upgrade-membership-button" type="submit">Cancel</button>
                     </form>
             </div>
@@ -28,6 +29,7 @@
                     <p>1 Blog per Month</p>
                     <p>$10.00/month</p>
                     <form action="/create-checkout-session" method="POST">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                         <input type="hidden" name="priceId" value="price_1NVkZ2FO0g9fOIaC9ebXmyEc" />
                         {% if user.membership_level == 'Good' %}
                             <button class="upgrade-membership-button" type="submit" disabled>Current Membership</button>
@@ -43,6 +45,7 @@
                 <p>2 Blogs per Month</p>
                 <p>$20.00/month</p>
                 <form action="/create-checkout-session" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="priceId" value="price_1NVkaOFO0g9fOIaCCekM3Xwd" />
                     {% if user.membership_level == 'Better' %}
                         <button class="upgrade-membership-button" type="submit" disabled>Current Membership</button>
@@ -58,6 +61,7 @@
                 <p>4 Blogs per Month</p>
                 <p>$30.00/month</p>
                 <form action="/create-checkout-session" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
                     <input type="hidden" name="priceId" value="price_1NVkbcFO0g9fOIaCqhrjKbhg" />
                     {% if user.membership_level == 'Best' %}
                     <button class="upgrade-membership-button" type="submit" disabled>Current Membership</button>

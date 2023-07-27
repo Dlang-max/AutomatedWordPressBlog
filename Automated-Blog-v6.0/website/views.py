@@ -57,6 +57,10 @@ def generateBlog():
 
             outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
             content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
+            image_url = getImages(BlogWriter.BlogWriter.getSubject(title=title))
+
+            if image_url != None:
+                content = f'<img src="{getImages(BlogWriter.BlogWriter.getSubject(title=title))}" alt="blog image" width="100%" height="auto" /> \n' + content
 
             new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id)
             db.session.add(new_blog)
@@ -67,7 +71,8 @@ def generateBlog():
 
             current_user.free_blogs_remaining = 0
             
-            db.session.commit()    
+            db.session.commit()  
+  
 
 
 
@@ -76,7 +81,15 @@ def generateBlog():
 
         if 'div_content' in request.form:
             if current_user.website_url == '':
-                blog = db.session.query(Blog).first()
+
+                blog = Blog.query.filter_by(user_id=current_user.id).first()
+                print(blog.blog_content)
+                print(current_user.id)
+                print(blog)
+
+                blog.blog_content = request.form.get('div_content')
+                db.session.commit()
+
                 return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
             
             url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
@@ -90,7 +103,13 @@ def generateBlog():
 
             header = {'Authorization': 'Basic ' + token.decode('utf-8')}
 
-            blog = db.session.query(Blog).first()
+            blog = Blog.query.filter_by(user_id=current_user.id).first()
+            blog.blog_content = request.form.get('div_content')
+            db.session.commit()
+
+            print('content: ' + request.form.get('div_content'))
+
+
 
             post = {
                 'title': blog.blog_title,
@@ -118,23 +137,25 @@ def generateBlog():
             current_user.website_application_password = website_application_password
             db.session.commit()   
 
-            blog = db.session.query(Blog).first()
+            blog = Blog.query.filter_by(user_id=current_user.id).first()
 
 
             return render_template("generate_blog.html", generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
 
     return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
-# def getMembershipLevel(subscription_id):
-#     try:
-#         subscription = stripe.Subscription.retrieve()
-#         price_id = subscription['data'][0]['plan']['id']
-#     except stripe.error.StripeError as e:
-#         print(f"Error: {e}")
-#         return None
-#     return config.prices['']
 
-# w3bP wuqE RA8B Zg9Y kBs8 TLuX
+def getImages(query):
+
+    query = query.replace(' ', '+')
+    url = f'https://pixabay.com/api/?key={config.pixabay_api_key}&q={query}&image_type=photo'
+
+    response = requests.get(url)
+    data = response.json()
+
+    if data['hits']:
+        return data['hits'][0]['webformatURL']
+    return None
 
 
 
