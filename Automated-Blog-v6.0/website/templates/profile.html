@@ -6,14 +6,21 @@
 <link rel="stylesheet" href="static/profileStyle.css">
 <main>
     <div class="profile-container">
+        <h3 align="Left">Profile</h3>
         <div class="info-container">
-            <p>Current Membership Level: {{user.membership_level}}</p>
-            <a href="/upgradeMembership" class="profile-info">Upgrade</a>
-            <a href="/upgradeMembership" class="profile-info">Cancel</a>
-        </div>
-        <div class="info-container">
+
+            <h4>Auto Blog Account</h4>
+            <p class="profile-field">email {{ user.email }} <a href="/changeEmail">change</a></p>
+            <p class="profile-field">password <a href="/changeEmail">change</a></p>
+            <p class="profile-field">membership level {{ user.membership_level }} <a href="/upgradeMembership">Upgrade</a><a href="/upgradeMembership">Cancel</a></p>
             <p>Blogs Remaining: {{user.free_blogs_remaining + user.blogs_remaining_this_month}}</p>
-        </div>        
+
+
+            {}
+            <h4>WordPress Website</h4>
+            <p class="profile-field">wevsite {{ user.website_url }} <a href="/changeWebsiteURL">change</a></p>
+            <p class="profile-field">password <a href="/changeEmail">change</a></p>
+        </div>      
     </div>
 </main>
 {% endblock %}

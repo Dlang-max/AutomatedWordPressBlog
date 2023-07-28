@@ -173,6 +173,7 @@ def cancelMembership():
     current_user.membership_level = 'Free'
     db.session.commit()
 
+    flash('Membership cancelled!', category='error')
     return render_template("profile.html", user=current_user)
 
 @auth.route('/create-checkout-session', methods=['POST'])
