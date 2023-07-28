@@ -1,11 +1,13 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db, mail
 from flask_login import login_user, login_required, logout_user, current_user
 import config
 import stripe
 from .models import Member
+import pyotp
+from flask_mail import Message
 
 auth = Blueprint('auth', __name__)
 
@@ -34,6 +36,21 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('auth.login'))
+
+@auth.route('/forgot-password', methods=['GET', 'POST'])
+def forgot_password():
+    if request.method == 'POST':
+        email = request.form.get('email')
+
+        user = User.query.filter_by(email=email).first()
+        if user:
+            key = pyotp.random_base32()
+            user.token = pyotp.TOTP(key)
+            db.session.commit()
+            flash('Password reset email sent!', category='success')
+        else:
+            flash('Email does not exist.', category='error')
+    return render_template("forgotPassword.html", user=current_user)
 
 
 @auth.route('/sign-up', methods=['GET', 'POST'])

@@ -1,6 +1,4 @@
 from website import create_app
-from datetime import timedelta
-
 
 app = create_app()
 
