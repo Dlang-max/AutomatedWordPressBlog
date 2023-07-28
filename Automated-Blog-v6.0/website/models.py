@@ -34,6 +34,7 @@ class User(db.Model, UserMixin):
     stripe_id = db.Column(db.String(150), unique=True)
     blogs = db.db.relationship('Blog')
     token = db.Column(db.String(150))
+    unique_token = db.Column(db.String(150), unique=True)
 
     user_reset_submissions = db.Column(db.Integer(), default=0)
     user_last_reset_submission = db.Column(db.DateTime())

@@ -49,7 +49,7 @@ def forgot_password():
             sendVerifcationEmail(user, email)
 
             flash('Password reset email sent!', category='success')
-            return redirect(url_for('auth.enter_verification', id=user.id))
+            return redirect(url_for('auth.enter_verification', unique_token=user.unique_token))
         else:
             flash('Email does not exist.', category='error')
             return render_template("forgotPassword.html", user=current_user)
@@ -59,10 +59,10 @@ def forgot_password():
 @auth.route('/enter-verification', methods=['GET', 'POST'])
 def enter_verification():
     if request.method == 'POST':
-        id = request.args.get('id', '')
+        unique_token = request.args.get('unique_token', '')
         if 'code' in request.form:
             code = request.form.get('code')
-            user_id = User.query.filter_by(id=id).first()
+            user_id = User.query.filter_by(unique_token=unique_token).first()
             db.session.commit()
 
 
@@ -138,8 +138,8 @@ def sign_up():
             flash('Password must be at least 7 characters.', category='error')
         
         else:
-            new_user = User(email=email, password=generate_password_hash(
-                password1, method='sha256'))
+            new_user = User(email=email, password=generate_password_hash(password1), 
+                unique_token=generate_password_hash(email))
             
 
             db.session.add(new_user)
@@ -200,7 +200,8 @@ def create_checkout_session():
 
         return redirect(checkout_session.url, code=303)
     except Exception as e:
-        return jsonify({'error': {'message': str(e)}}), 400
+        flash('Issue connecting to stripe. Try again later.', category='error')
+        return redirect(url_for('auth.upgradeMembership'))
 
 
 @auth.route('/webhook', methods=['POST'])

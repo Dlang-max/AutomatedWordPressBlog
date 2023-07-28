@@ -20,7 +20,6 @@ class BlogWriter():
             messages=[{'role':'user', "content": f"Please ignore all previous instructions. You are an expert copywriter who creates detailed and thoughtful blog articles. You have a friendly tone of voice. You have a conversational writting style. I will give you an outline for an article and I want you to expand in english on each of the subheadings to create a complete article from it. Please intersperse short and ling sentences. Utilize common terminology to enhance the originality of the content. Please format the content in a professional format. Do not self reference. Do not explain what you are doing. The blog outline is {outline}. Also include the following additional information: {additional_information}. Also use HTML tags and CSS styling to format this blog post. Make the font arial. Make the title a bold h2 arial tag and make the subheadings a blog h3 arial tag."}],
             )
         content = completion.choices[0].message.content
-        print(content)
         return content
     
     def getSubject(title=''):
@@ -29,5 +28,4 @@ class BlogWriter():
             messages=[{'role':'user', "content": f"Provide this response in one word. What is the one word subject of this sentence: {title}"}],
             )
         content = completion.choices[0].message.content
-        print(content)
         return content      

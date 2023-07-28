@@ -9,6 +9,7 @@ import config
 import stripe
 import base64
 import requests
+import openai
 
 views = Blueprint('views', __name__)
 
@@ -60,10 +61,16 @@ def generateBlog():
                 return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
             additional_information = request.form.get('additional-information')
 
-            outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
-            content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
-            image_url = getImages(BlogWriter.BlogWriter.getSubject(title=title))
+            try: 
+                outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
+                content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
+                image_url = getImages(BlogWriter.BlogWriter.getSubject(title=title))
+            except openai.error.APIConnectionError as e:
+                flash('Error generating blog. Try again later.', category='error')
+                return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
+
+            
             if image_url != None:
                 content = f'<img src="{getImages(BlogWriter.BlogWriter.getSubject(title=title))}" alt="blog image" width="100%" height="auto" /> \n' + content
 
