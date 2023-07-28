@@ -94,11 +94,29 @@ display: flex;
   width: 30px;
   height: 30px;
   border-radius: 5px; 
+  border: 1px solid black;
 }
 
-.close:hover{
-  background-color: white;
+#close-error{
+  background-color: rgba(255, 135, 135);
+  transition: box-shadow 0.3s;
 }
+
+#close-error:hover{
+  background-color: gainsboro;
+  box-shadow: 0 0 10px rgba(0, 0, 0)
+}
+
+#close-success{
+  background-color: rgb(135, 255, 143);
+  transition: box-shadow 0.3s;
+}
+
+#close-success:hover{
+  background-color: gainsboro;
+  box-shadow: 0 0 10px rgba(0, 0, 0)
+}
+
 
 
 @media (max-width: 400px){
