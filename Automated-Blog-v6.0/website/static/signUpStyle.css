@@ -51,7 +51,10 @@ p{
 
 p a{
   color: #458eff;
-  text-decoration: none;
+}
+
+p a:hover{
+  text-decoration: underline;
 }
 
 .button:hover{

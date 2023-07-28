@@ -44,39 +44,54 @@ def forgot_password():
 
         user = User.query.filter_by(email=email).first()
         if user:
-            key = pyotp.random_base32()
-            token = pyotp.TOTP(key).now()
-            user.token = token
-            db.session.commit()
+            sendVerifcationEmail(user, email)
+            print(user.token)
 
-            message = Message(
-                'Password Reset',
-                sender='noreply@demo.com',
-                recipients=[email],
-                body=f'Verification code is {token}'
-            )
-            mail.send(message)
             flash('Password reset email sent!', category='success')
-            return render_template("forgotPassword.html", user=current_user)
+            return redirect(url_for('auth.enter_verification'))
         else:
             flash('Email does not exist.', category='error')
             return render_template("forgotPassword.html", user=current_user)
 
     return render_template("forgotPassword.html", user=current_user)
 
-# @auth.route('/enter-verification', methods=['GET', 'POST'])
-# def enter_verification():
-#     if request.method == 'POST':
-#         code = request.form.get('code')
+@auth.route('/enter-verification', methods=['GET', 'POST'])
+def enter_verification():
+    if request.method == 'POST':
+        if 'code' in request.form:
+            code = request.form.get('code')
+            print(code)
 
-#         user = User.query.filter_by(code=code).first()
-#         if user:
-#             flash('Correct Code', category='success')
-#             return 
-#         else:
-#             flash('Incorrect Code', category='error')
+            user = User.query.filter_by(token=code).first()
+            if user:
+                flash('Correct Code', category='success')
+                return render_template("enterVerification.html", user=current_user, correct_code=True, id=user.id)
+            else:
+                flash('Incorrect Code', category='error')
 
-#     return render_template("enterVerification.html", user=current_user)
+        elif 'password1' in request.form:
+            id = request.form.get('id') 
+            password1 = request.form.get('password1')
+            password2 = request.form.get('password2')
+
+            if password1 != password2:
+                flash('Passwords don\'t match.', category='error')
+            elif len(password1) < 7:
+                flash('Password must be at least 7 characters.', category='error')
+            else:
+                user = User.query.filter_by(id=id).first()
+                print(user)
+                user.password = generate_password_hash(password1, method='sha256')
+                user.token = ''
+                db.session.commit()
+
+                flash('Password reset successfully!', category='success')
+                return redirect(url_for('auth.login'))
+
+    return render_template("enterVerification.html", user=current_user, correct_code=False)
+
+
+    
 
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
@@ -129,9 +144,6 @@ def upgradeMembership():
 def cancelMembership():
     stripe.api_key = config.stripe_keys["secret_key"]
     stripe.Subscription.delete(current_user.subscription_id)
-
-
-
 
     current_user.subscription_id = ''
     current_user.membership_level = 'Free'
@@ -202,3 +214,19 @@ def stripe_webhook():
         db.session.commit()
 
     return redirect(url_for('views.generateBlog'))
+
+
+
+def sendVerifcationEmail(user, email):
+    key = pyotp.random_base32()
+    token = pyotp.TOTP(key).now()
+    user.token = token
+    db.session.commit()
+
+    message = Message(
+        'Password Reset',
+        sender='noreply@demo.com',
+        recipients=[email],
+        body=f'Verification code is {token}'
+    )
+    mail.send(message)

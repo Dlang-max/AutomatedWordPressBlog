@@ -1,0 +1,57 @@
+{% extends "base.html" %} {% block title %}Verification{% endblock %}
+ {% block content%}
+    <link rel="stylesheet" href="static/enterVerificationStyle.css">
+    <main>
+    {% if not correct_code %}
+      <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <h3 align="center">Enter Verifcation Code</h3>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="code"
+            name="code"
+            placeholder="Enter verification code"
+            required
+          />
+        </div>
+        <br />
+        <button type="submit" class="button">Enter Verification Code</button>
+      </form>
+    {% else %}
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <h3 align="center">Change Password</h3>
+        <div class="form-group">
+          <input
+            type="password"
+            class="form-control"
+            id="password1"
+            name="password1"
+            placeholder="Enter password"
+            required
+          />
+        </div>
+        <div class="form-group">
+            <input
+              type="password"
+              class="form-control"
+              id="password2"
+              name="password2"
+              placeholder="Enter password"
+              required
+            />
+          </div>
+          <input
+            type="hidden"
+            name="id"
+            value="{{ id }}"
+          />
+        <br />
+        <button type="submit" class="button">Change Password</button>
+      </form>
+    {% endif %}
+      </main>
+    {% endblock %}
+    
