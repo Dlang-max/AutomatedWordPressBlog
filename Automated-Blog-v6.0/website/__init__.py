@@ -18,6 +18,9 @@ def create_app():
     app.config['MAIL_PORT'] = 465
     app.config['MAIL_USERNAME'] = 'langd052405@gmail.com'
     app.config['MAIL_PASSWORD'] = config.email_password
+    app.config['MAIL_USE_TLS'] = False
+    app.config['MAIL_USE_SSL'] = True
+    mail.init_app(app)
 
 
 
@@ -46,7 +49,6 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    mail.init_app(app)
 
 
     @login_manager.user_loader

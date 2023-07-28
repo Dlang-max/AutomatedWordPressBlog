@@ -33,6 +33,7 @@ class User(db.Model, UserMixin):
     has_paid = db.Column(db.Boolean, default=False)
     stripe_id = db.Column(db.String(150), unique=True)
     blogs = db.db.relationship('Blog')
+    token = db.Column(db.String(150))
 
     # def get_reset_token(self, expires_sec=1800):
     #     s = Serializer(app.config.SECRET_KEY, expires_sec)

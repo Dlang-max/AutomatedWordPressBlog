@@ -45,12 +45,38 @@ def forgot_password():
         user = User.query.filter_by(email=email).first()
         if user:
             key = pyotp.random_base32()
-            user.token = pyotp.TOTP(key)
+            token = pyotp.TOTP(key).now()
+            user.token = token
             db.session.commit()
+
+            message = Message(
+                'Password Reset',
+                sender='noreply@demo.com',
+                recipients=[email],
+                body=f'Verification code is {token}'
+            )
+            mail.send(message)
             flash('Password reset email sent!', category='success')
+            return render_template("forgotPassword.html", user=current_user)
         else:
             flash('Email does not exist.', category='error')
+            return render_template("forgotPassword.html", user=current_user)
+
     return render_template("forgotPassword.html", user=current_user)
+
+# @auth.route('/enter-verification', methods=['GET', 'POST'])
+# def enter_verification():
+#     if request.method == 'POST':
+#         code = request.form.get('code')
+
+#         user = User.query.filter_by(code=code).first()
+#         if user:
+#             flash('Correct Code', category='success')
+#             return 
+#         else:
+#             flash('Incorrect Code', category='error')
+
+#     return render_template("enterVerification.html", user=current_user)
 
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
