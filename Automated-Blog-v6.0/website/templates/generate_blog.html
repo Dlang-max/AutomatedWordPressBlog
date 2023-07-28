@@ -14,7 +14,6 @@
             id="blog-title"
             name="blog-title"
             placeholder="Enter Blog Title"
-            required
           />
         </div>
         <div class="form-group">
@@ -27,7 +26,7 @@
             />
           </div>
         <br />
-        <button type="submit" id="generate-button" class="btn btn-primary">Generate Blog</button>
+        <button type="submit" id="generate-button" class="button">Generate Blog</button>
       </form>
       {% else %}
           {% if wants_to_link_wordpress and user.website_url == '' %}
@@ -72,7 +71,7 @@
                 </div>
             </div>
               <br />
-                <button type="submit" class="btn btn-primary">Link to WordPress</button>
+                <button type="submit" class="button">Link to WordPress</button>
             </form>
           {% endif %}
       <form method="post" id="generated-content" name="generated">
@@ -83,7 +82,7 @@
         </div>
         <input type="hidden" name="div_content" id="divContentInput">
         <br />
-          <button type="submit" class="btn btn-primary">Publish to WordPress</button>
+          <button type="submit" class="button">Publish to WordPress</button>
       </form>
     {% endif %}
     {% else %}
@@ -91,7 +90,7 @@
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <h2 align="center">Upgrade Membership for More</h3>
       <br />
-        <button type="submit" class="btn btn-primary">Upgrade Membership</button>
+        <button type="submit" class="button">Upgrade Membership</button>
     </form>
     {% endif %}
       </main>

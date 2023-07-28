@@ -37,13 +37,49 @@
               {% if user.email %}
                 <a href="/logout">Log out</a>
               {% else %}
-              <a href="/logout">Join</a>
+              <a href="/sign-up">Join</a>
               {% endif %}
             </li>
           </ul>
       </div>
   </nav>
+  {% with messages = get_flashed_messages(with_categories=true) %} {% if
+    messages %} {% for category, message in messages %} {% if category ==
+    'error' %}
+    <div class="error" id="error">
+      {{ message }}
+      <button type="button" class="close" id="close-error">
+        <span class="x">&times;</span>
+      </button>
+    </div>
+    {% else %}
+    <div class="success" id="success">
+      {{ message }}
+      <button type="button" class="close" id="close-success">
+        <span class="x">&times;</span>
+      </button>
+    </div>
+    {% endif %} {% endfor %} {% endif %} {% endwith %}
     {% block content %}{%endblock%}
     <script src="static/script.js"></script>
+
+    <script>
+      var errorCloseButton = document.getElementById("close-error");
+      var error = document.getElementById("error");
+
+      errorCloseButton.addEventListener("click", function () {
+        error.style.display = "none";
+      });
+    </script>
+
+    <script>
+      var successCloseButton = document.getElementById("close-success");
+      var success = document.getElementById("success");
+
+      successCloseButton.addEventListener("click", function () {
+        success.style.display = "none";
+      });
+
+    </script>
 </body>
 </html>

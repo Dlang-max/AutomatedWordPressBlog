@@ -35,7 +35,7 @@ input:focus{
   outline: none;
 }
 
-button{
+.button{
   width: 80%;
   height: 30px;
   background-color: #458eff;
@@ -54,7 +54,7 @@ p a{
   text-decoration: none;
 }
 
-button:hover{
+.button:hover{
   background-color: #2864b9;
 }
 

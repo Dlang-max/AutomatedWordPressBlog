@@ -53,6 +53,10 @@ def generateBlog():
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
+
+            if title == '':
+                flash('Please enter a title for your blog.', category='error')
+                return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
             additional_information = request.form.get('additional-information')
 
             outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
