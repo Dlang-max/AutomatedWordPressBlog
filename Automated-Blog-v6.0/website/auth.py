@@ -8,6 +8,7 @@ import stripe
 from .models import Member
 import pyotp
 from flask_mail import Message
+import datetime
 
 auth = Blueprint('auth', __name__)
 
@@ -48,7 +49,7 @@ def forgot_password():
             sendVerifcationEmail(user, email)
 
             flash('Password reset email sent!', category='success')
-            return redirect(url_for('auth.enter_verification'))
+            return redirect(url_for('auth.enter_verification', id=user.id))
         else:
             flash('Email does not exist.', category='error')
             return render_template("forgotPassword.html", user=current_user)
@@ -58,17 +59,36 @@ def forgot_password():
 @auth.route('/enter-verification', methods=['GET', 'POST'])
 def enter_verification():
     if request.method == 'POST':
+        id = request.args.get('id', '')
         if 'code' in request.form:
             code = request.form.get('code')
+            user_id = User.query.filter_by(id=id).first()
+            db.session.commit()
 
-            user = User.query.filter_by(token=code).first()
 
+            if user_id == None: 
+                return redirect(url_for('auth.login'))
+            elif user_id.user_reset_submissions < 3 or (datetime.datetime.now() - user_id.user_last_reset_submission).total_seconds() > 60:
+                user_id.user_last_reset_submission = datetime.datetime.now()
+                db.session.commit()
 
-            if user:
-                flash('Correct Code', category='success')
-                return render_template("enterVerification.html", user=current_user, correct_code=True, id=user.id)
+                user_token = User.query.filter_by(token=code).first()
+
+                if user_token:
+                    user_id.user_reset_submissions = 0
+                    user_id.user_last_reset_submission = datetime.datetime.now()
+                    db.session.commit()
+                    flash('Correct Code', category='success')
+                    return render_template("enterVerification.html", user=current_user, correct_code=True, id=user_id.id)
+                else:
+                    user_id.user_reset_submissions = user_id.user_reset_submissions + 1
+                    db.session.commit()
+                    flash('Incorrect Code', category='error')
+                    return render_template("enterVerification.html", user=current_user, correct_code=False, id=user_id.id)
             else:
-                flash('Incorrect Code', category='error')
+                flash('Too many attempts, please wait 60 seconds.', category='error')
+                return render_template("enterVerification.html", user=current_user, correct_code=False, id=user_id.id)
+
 
 
         elif 'password1' in request.form:
@@ -78,8 +98,10 @@ def enter_verification():
 
             if password1 != password2:
                 flash('Passwords don\'t match.', category='error')
+                return render_template("enterVerification.html", user=current_user, correct_code=True, id=id)
             elif len(password1) < 7:
                 flash('Password must be at least 7 characters.', category='error')
+                return render_template("enterVerification.html", user=current_user, correct_code=True, id=id)
             else:
                 user = User.query.filter_by(id=id).first()
                 print(user)

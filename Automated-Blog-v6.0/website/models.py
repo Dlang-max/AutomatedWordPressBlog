@@ -35,8 +35,9 @@ class User(db.Model, UserMixin):
     blogs = db.db.relationship('Blog')
     token = db.Column(db.String(150))
 
-    # def get_reset_token(self, expires_sec=1800):
-    #     s = Serializer(app.config.SECRET_KEY, expires_sec)
-    #     return s.dumps({'user_id': self.id}).decode('utf-8')
+    user_reset_submissions = db.Column(db.Integer(), default=0)
+    user_last_reset_submission = db.Column(db.DateTime())
+
+
 
 

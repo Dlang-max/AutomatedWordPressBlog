@@ -80,6 +80,7 @@ def generateBlog():
   
 
 
+            flash('Blog Generated', category='success')
 
             return render_template("generate_blog.html", generating=True, generate=True, user=current_user, title=title, content=content, wants_to_link_wordpress=False)
 
@@ -122,12 +123,18 @@ def generateBlog():
                 'status': 'publish'
             }
 
-            r = requests.post(url, headers=header, json=post)
-            print(r)
+            try: 
+                r = requests.post(url, headers=header, json=post)
+            except requests.exceptions.ConnectionError:
+                flash('Error connecting to WordPress. Please check your URL and try again.', category='error')
+                return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+
 
 
             db.session.delete(blog)
             db.session.commit()
+
+            flash('Blog Posted to WordPress!', category='success')
 
             return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
@@ -144,7 +151,7 @@ def generateBlog():
 
             blog = Blog.query.filter_by(user_id=current_user.id).first()
 
-
+            flash('Linked to WordPress!', category='success')
             return render_template("generate_blog.html", generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
 
     return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
