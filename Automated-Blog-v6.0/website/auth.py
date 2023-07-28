@@ -43,9 +43,9 @@ def forgot_password():
         email = request.form.get('email')
 
         user = User.query.filter_by(email=email).first()
+        
         if user:
             sendVerifcationEmail(user, email)
-            print(user.token)
 
             flash('Password reset email sent!', category='success')
             return redirect(url_for('auth.enter_verification'))
@@ -60,14 +60,16 @@ def enter_verification():
     if request.method == 'POST':
         if 'code' in request.form:
             code = request.form.get('code')
-            print(code)
 
             user = User.query.filter_by(token=code).first()
+
+
             if user:
                 flash('Correct Code', category='success')
                 return render_template("enterVerification.html", user=current_user, correct_code=True, id=user.id)
             else:
                 flash('Incorrect Code', category='error')
+
 
         elif 'password1' in request.form:
             id = request.form.get('id') 
