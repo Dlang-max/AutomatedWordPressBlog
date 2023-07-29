@@ -10,6 +10,7 @@ import stripe
 import base64
 import requests
 import openai
+import random
 
 views = Blueprint('views', __name__)
 
@@ -173,7 +174,7 @@ def getImages(query):
     data = response.json()
 
     if data['hits']:
-        return data['hits'][0]['webformatURL']
+        return data['hits'][int(random.randrange(len(data)))]['webformatURL']
     return None
 
 
