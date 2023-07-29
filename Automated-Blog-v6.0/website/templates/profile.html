@@ -17,9 +17,10 @@
 
         <h4>WordPress Website</h4>
         {% if user.website_url != '' %}
-            <p class="profile-field">website: {{ user.website_url }} <a class="info-link" href="/linkWordPress">change</a></p>
-            <p class="profile-field">website username: {{ user.website_username }} <a class="info-link" href="/linkWordPress">change</a></p>
-            <p class="profile-field">website password: {{ user.website_application_password }} <a class="info-link" href="/linkWordPress">change</a></p>
+        <form action="/linkWordPress">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">WordPress Linked! Click to Change Information</button>
+        </form>
         {% else %}
         <form action="/linkWordPress">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

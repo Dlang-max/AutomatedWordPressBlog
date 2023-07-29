@@ -39,6 +39,11 @@ class User(db.Model, UserMixin):
     user_reset_submissions = db.Column(db.Integer(), default=0)
     user_last_reset_submission = db.Column(db.DateTime())
 
+class Admin(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True)
+    password = db.Column(db.String(150)) 
+
 
 
 

@@ -1,0 +1,39 @@
+{% extends "base.html" %} {% block title %}Admin{% endblock %}
+ {% block content%}
+    <link rel="stylesheet" href="static/adminPanelStyle.css">
+    <main>
+      <div class="number-users"><h3>Users: {{length}}</h3></div>
+      <div class="users-container">
+        {% for user in users %}
+        <div class="user-container">
+          <div class="user-email">emial: {{user.email}}</div>
+          <div class="wordpress">
+            <p>WordPress</p>
+            {% if user.website_url != "" %}
+            <p class="linked">Linked</p>
+            {% else %}
+            <p class="not-linked">Not Linked</p>
+            {% endif %}
+          </div>
+          <div class="blogs-remaining">
+            <p>Blogs Remaining: {{ user.blogs_remaining_this_month + user.free_blogs_remaining }}</p>
+            <div class="forms">
+              <form class="change-blog-count" id="add" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="add" value="{{user.email}}">
+                <button type="submit" class="blog-button" id="add"><span>&plus;</span></button>
+              </form>
+              <form class="change-blog-count" id="add" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="subtract" value="{{user.email}}">
+                <button type="submit" class="blog-button" id="subtract"><span>&minus;</span></button>
+              </form>  
+            </div>
+          </div>
+          <div class="membership-level">Membership level: {{ user.membership_level }}</div>
+        </div>
+        {% endfor %}
+      </div>  
+    </main>
+    {% endblock %}
+    

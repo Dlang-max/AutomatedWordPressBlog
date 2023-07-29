@@ -18,6 +18,11 @@
 
       <div class="navbar-links">
           <ul>
+            {% if user.id == 1 %}
+            <li>
+              <a href="/adminPanel">Panel</a>
+            </li>
+            {% endif %}
             {% if user.email %}
             <li>
               <a href="/profile">Profile</a>

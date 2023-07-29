@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, jsonify
 from .models import User
+from .models import Admin
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, mail
 from flask_login import login_user, login_required, logout_user, current_user
@@ -144,11 +145,56 @@ def sign_up():
 
             db.session.add(new_user)
             db.session.commit()
+
+            if new_user.id == 1:
+                new_admin = Admin(email=email, password=generate_password_hash(password1))
+                db.session.add(new_admin)
+                db.session.commit()
+            
             login_user(new_user, remember=True)
             flash('Account created!', category='success')
             return redirect(url_for('views.generateBlog'))
 
     return render_template("sign_up.html", user=current_user)
+
+@auth.route('/adminPanel', methods=['GET', 'POST'])
+@login_required
+def adminPanel():
+    if current_user.id != 1:
+        flash('You are not an admin.', category='error')
+        return redirect(url_for('views.generateBlog'))
+    
+    if request.method == 'POST':
+        if 'add' in request.form:
+            email = request.form.get('add')
+            user = User.query.filter_by(email=email).first()
+
+            if user:
+                user.blogs_remaining_this_month = user.blogs_remaining_this_month + 1
+                db.session.commit()
+                flash('Blog Added!', category='success')
+        elif 'subtract' in request.form:
+            email = request.form.get('subtract')
+            user = User.query.filter_by(email=email).first()
+
+            if user:
+                user.blogs_remaining_this_month = user.blogs_remaining_this_month - 1
+                db.session.commit()
+                flash('Blog Subtracted!', category='success')
+
+
+
+                
+
+
+
+
+
+
+
+
+    return render_template("adminPanel.html", length=len(User.query.all()),  users=User.query.all(), user=current_user)
+
 
 @auth.route('/config')
 @login_required
@@ -244,6 +290,7 @@ def linkWordPress():
 
 
     return render_template('linkWordPress.html', user=current_user)
+
 
 
 @auth.route('/create-checkout-session', methods=['POST'])
