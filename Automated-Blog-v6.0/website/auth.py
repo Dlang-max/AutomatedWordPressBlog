@@ -181,18 +181,7 @@ def adminPanel():
                 user.blogs_remaining_this_month = user.blogs_remaining_this_month - 1
                 db.session.commit()
                 flash('Blog Subtracted!', category='success')
-
-
-
                 
-
-
-
-
-
-
-
-
     return render_template("adminPanel.html", length=len(User.query.all()),  users=User.query.all(), user=current_user)
 
 

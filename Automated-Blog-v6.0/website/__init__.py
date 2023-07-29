@@ -20,9 +20,9 @@ def create_app():
     app.config['MAIL_PASSWORD'] = config.email_password
     app.config['MAIL_USE_TLS'] = False
     app.config['MAIL_USE_SSL'] = True
+    app.config['SCHEDULER_API_ENABLED'] = True
+
     mail.init_app(app)
-
-
 
 
     csrf = CSRFProtect(app)
@@ -54,6 +54,9 @@ def create_app():
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
+    
+
+
 
     return app
 
@@ -62,3 +65,4 @@ def create_database(app):
     if not path.exists('website/' + DB_NAME):
         db.create_all(app=app)
         print('Created Database!')
+
