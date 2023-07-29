@@ -4,8 +4,6 @@ import config
 from flask_apscheduler import APScheduler
 from datetime import datetime, timedelta
 
-
-
 app = create_app()
 
 scheduler = APScheduler()
@@ -21,19 +19,20 @@ def check_memberships():
 
         for user in users:
             try:
-                stripe.api_key = config.stripe_keys["secret_key"]
+                if user.membership_level != 'Free':
+                    stripe.api_key = config.stripe_keys["secret_key"]
 
-                subscription_id = user.subscription_id
-                print(subscription_id)
-                if subscription_id != None:
-                    subscription = stripe.Subscription.retrieve(subscription_id)
-                    status = subscription['status']
-                else:
-                    continue
+                    subscription_id = user.subscription_id
+                    print(subscription_id)
+                    if subscription_id != None:
+                        subscription = stripe.Subscription.retrieve(subscription_id)
+                        status = subscription['status']
+                    else:
+                        continue
 
-                if status == 'active':
-                    user.blogs_remaining_this_month = config.blogs_with_membership[user.membership_level] + user.blogs_remaining_this_month
-                    db.session.commit()
+                    if status == 'active':
+                        user.blogs_remaining_this_month = config.blogs_with_membership[user.membership_level] + user.blogs_remaining_this_month
+                        db.session.commit()
             except stripe.error.StripeError as e:
                 print("Error:", str(e))
                 scheduler.add_job(id='one_minute_task', func=check_memberships, trigger='date', run_date=datetime.now() + timedelta(seconds=30))
