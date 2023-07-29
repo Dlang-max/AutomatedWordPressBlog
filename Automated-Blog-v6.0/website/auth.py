@@ -163,6 +163,50 @@ def get_publishable_key():
 def upgradeMembership():
     return render_template("upgradeMembership.html", user=current_user)
 
+@auth.route('/changeEmail', methods=['GET', 'POST'])
+@login_required
+def changeEmail():
+    if request.method == 'POST':
+
+        user = User.query.filter_by(email=request.form.get('email')).first()
+
+        if user:
+            flash('Email already exists.', category='error')
+            return render_template("changeEmail.html", user=current_user)
+        else:
+            email = request.form.get('email')
+            current_user.email = email
+            db.session.commit()
+            flash('Email changed successfully!', category='success')
+            return redirect(url_for('views.profile'))
+    return render_template("changeEmail.html", user=current_user)
+
+@auth.route('/changePassword', methods=['GET', 'POST'])
+@login_required
+def changePassword():
+    if request.method == 'POST':
+        current_password = request.form.get('current-password')
+        password1 = request.form.get('new-password')
+        password2 = request.form.get('new-password-confirm')
+
+
+        if not check_password_hash(current_user.password, current_password):
+            flash('Incorrect password.', category='error')
+            return render_template("changePassword.html", user=current_user)
+        elif password1 != password2:
+            flash('Passwords don\'t match.', category='error')
+            return render_template("changePassword.html", user=current_user)
+        elif len(password1) < 7:
+            flash('Password must be at least 7 characters.', category='error')
+            return render_template("changePassword.html", user=current_user)
+        else:
+            current_user.password = generate_password_hash(password1)
+            db.session.commit()
+            flash('Password changed successfully!', category='success')
+            return redirect(url_for('views.profile'))
+            
+    return render_template("changePassword.html", user=current_user)
+
 @auth.route('/cancelMembership', methods=['GET', 'POST'])
 @login_required
 def cancelMembership():
@@ -176,13 +220,38 @@ def cancelMembership():
     flash('Membership cancelled!', category='error')
     return render_template("profile.html", user=current_user)
 
+@auth.route('/linkWordPress', methods=['GET', 'POST'])
+@login_required
+def linkWordPress():
+
+
+    if request.method == 'POST':
+        website_url = request.form.get('websiteURL')
+        website_username = request.form.get('wordPressUsername')
+        website_application_password_1 = request.form.get('appPassword1')
+        website_application_password_2 = request.form.get('appPassword2')
+
+        if website_application_password_1 != website_application_password_2:
+            flash('Application passwords don\'t match.', category='error')
+            return render_template('linkWordPress.html', user=current_user)
+        else:
+            current_user.website_url = website_url
+            current_user.website_username = website_username
+            current_user.website_application_password = website_application_password_1
+            db.session.commit()
+            flash('WordPress linked successfully!', category='success')
+            return redirect(url_for('views.generateBlog'))
+
+
+    return render_template('linkWordPress.html', user=current_user)
+
+
 @auth.route('/create-checkout-session', methods=['POST'])
 @login_required
 def create_checkout_session():
     price = request.form.get('priceId')
     domain_url = 'http://localhost:5000/'
     stripe.api_key = config.stripe_keys["secret_key"]
-
 
     try:
         checkout_session = stripe.checkout.Session.create(

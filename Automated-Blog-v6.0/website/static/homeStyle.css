@@ -108,6 +108,7 @@ display: flex;
 }
 
 #close-success{
+  margin: none;
   background-color: rgb(135, 255, 143);
   transition: box-shadow 0.3s;
 }

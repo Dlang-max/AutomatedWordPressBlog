@@ -1,0 +1,54 @@
+{% extends "base.html" %} {% block title %}Link WordPress{% endblock %}
+ {% block content%}
+    <link rel="stylesheet" href="static/linkWordPressStyle.css">
+    <main>
+        <form method="post" id="link-wordpress" name="link-wordpress">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <h2 align="center">Link to WordPress Website</h3>
+            <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="websiteURL"
+                  name="websiteURL"
+                  placeholder="Enter website URL"
+                  required
+              />
+              </div>
+              <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="wordPressUsername"
+                  name="wordPressUsername"
+                  placeholder="Enter Username for Wordpress Website"
+                  required
+              />
+              </div>
+              <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="appPassword1"
+                  name="appPassword1"
+                  placeholder="Enter application password"
+                  required
+              />
+              </div>
+              <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="appPassword2"
+                  name="appPassword2"
+                  placeholder="Confirm application password"
+                  required
+              />
+              </div>
+          </div>
+            <br />
+              <button type="submit" class="button">Link to WordPress</button>
+          </form>
+      </main>
+    {% endblock %}
+    

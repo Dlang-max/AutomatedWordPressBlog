@@ -5,22 +5,28 @@
 {% block content%}
 <link rel="stylesheet" href="static/profileStyle.css">
 <main>
-    <div class="profile-container">
-        <h3 align="Left">Profile</h3>
-        <div class="info-container">
+    <div class="info-container">
+        <h4>Auto Blog Account</h4>
+        <p class="profile-field">email: {{ user.email }} <a class="info-link" href="/changeEmail">change</a></p>
+        <p class="profile-field">password <a class="info-link" href="/changePassword">change</a></p>
+        <p class="profile-field">membership level: {{ user.membership_level }} 
+            {% if user.membership_level != 'Best' %}<a class="info-link" id="upgrade" href="/upgradeMembership">Upgrade</a>{% endif %}
+            {% if user.membership_level != 'Free' %}<a class="info-link" href="/upgradeMembership">Cancel</a>{% endif %}
+        </p>
+        <p class="profile-field" id="blogs-remaining">Blogs Remaining: {{user.free_blogs_remaining + user.blogs_remaining_this_month}}</p>
 
-            <h4>Auto Blog Account</h4>
-            <p class="profile-field">email {{ user.email }} <a href="/changeEmail">change</a></p>
-            <p class="profile-field">password <a href="/changeEmail">change</a></p>
-            <p class="profile-field">membership level {{ user.membership_level }} <a href="/upgradeMembership">Upgrade</a><a href="/upgradeMembership">Cancel</a></p>
-            <p>Blogs Remaining: {{user.free_blogs_remaining + user.blogs_remaining_this_month}}</p>
+        <h4>WordPress Website</h4>
+        {% if user.website_url != '' %}
+            <p class="profile-field">website: {{ user.website_url }} <a class="info-link" href="/linkWordPress">change</a></p>
+            <p class="profile-field">website username: {{ user.website_username }} <a class="info-link" href="/linkWordPress">change</a></p>
+            <p class="profile-field">website password: {{ user.website_application_password }} <a class="info-link" href="/linkWordPress">change</a></p>
+        {% else %}
+        <form action="/linkWordPress">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">Link WordPress Website</button>
+        </form>
+        {% endif %}
+    </div>   
 
-
-            {}
-            <h4>WordPress Website</h4>
-            <p class="profile-field">wevsite {{ user.website_url }} <a href="/changeWebsiteURL">change</a></p>
-            <p class="profile-field">password <a href="/changeEmail">change</a></p>
-        </div>      
-    </div>
 </main>
 {% endblock %}
