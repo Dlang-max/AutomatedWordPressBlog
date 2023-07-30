@@ -159,6 +159,120 @@ def generateBlog():
     return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
 
+
+@views.route('/writeBlog', methods=['GET', 'POST'])
+@login_required
+def writeBlog():
+    stripe_id = current_user.stripe_id
+    member = Member.query.filter_by(stripe_id=stripe_id).first()
+    if member:
+        subscription_id = member.subscription_id
+        try:
+            subscription = stripe.Subscription.retrieve(subscription_id)
+
+            membership_level = config.prices[subscription['items']['data'][0]['plan']['id']]
+        except stripe.error.StripeError as e:
+            print(':(')
+        
+        current_user.subscription_id = subscription_id
+        current_user.membership_level = membership_level
+        current_user.blogs_remaining_this_month = current_user.blogs_remaining_this_month + config.blogs_with_membership[membership_level]
+        current_user.has_paid = True
+        db.session.commit()
+
+        member_to_delete = Member.query.filter_by(stripe_id=stripe_id).first()
+        db.session.delete(member_to_delete)
+        db.session.commit()
+
+    if request.method == 'POST':
+
+        if 'blog-title' in request.form:
+            title = request.form.get('blog-title')
+            content = request.form.get('div_content')
+            image = request.form.get('file')
+
+            if title == '':
+                flash('Please enter a title for your blog.', category='error')
+                return render_template("writeBlog.html", user=current_user, title='', content=content, wants_to_link_wordpress=False)
+
+            if content == '':
+                flash('Please enter content for your blog.', category='error')
+                return render_template("writeBlog.html", user=current_user, title=title, content='', wants_to_link_wordpress=False)
+            
+            
+            new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id)
+            db.session.add(new_blog)
+            db.session.commit()
+
+            if current_user.website_url == '':
+                flash('Link to WordPress to post your blog.', category='error')
+                return render_template("writeBlog.html", user=current_user, title=new_blog.blog_title, content=new_blog.blog_content, wants_to_link_wordpress=True)
+
+
+            if current_user.free_blogs_remaining == 0:
+                current_user.blogs_remaining_this_month -= 1
+
+            current_user.free_blogs_remaining = 0
+            db.session.commit()  
+
+            url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
+
+            user = current_user.website_username
+            password = current_user.website_application_password
+
+            creds = user + ':' + password
+
+            token = base64.b64encode(creds.encode())
+
+            header = {'Authorization': 'Basic ' + token.decode('utf-8')}
+
+            blog = Blog.query.filter_by(user_id=current_user.id).first()
+            blog.blog_content = request.form.get('div_content')
+            db.session.commit()
+
+
+
+
+            post = {
+                'title': blog.blog_title,
+                'content': blog.blog_content,
+                'status': 'publish'
+            }
+
+            try: 
+                r = requests.post(url, headers=header, json=post)
+            except requests.exceptions.ConnectionError:
+                flash('Error connecting to WordPress. Please check your URL and try again.', category='error')
+                return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+
+
+
+            db.session.delete(blog)
+            db.session.commit()
+
+            flash('Blog Posted to WordPress!', category='success')
+
+            return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
+        
+        elif 'wordPressUsername' in request.form:
+            website_url = request.form.get('websiteURL')
+            website_username = request.form.get('wordPressUsername')
+            website_application_password = request.form.get('appPassword1')
+
+            current_user.website_url = website_url
+            current_user.website_username = website_username
+            current_user.website_application_password = website_application_password
+            db.session.commit()  
+
+            blog = Blog.query.filter_by(user_id=current_user.id).first()
+
+            flash('Linked to WordPress!', category='success')
+            return render_template("writeBlog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+        
+    return render_template("writeBlog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
+
+
+
 def getImages(query):
 
     query = query.replace(' ', '+')

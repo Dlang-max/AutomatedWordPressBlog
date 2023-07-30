@@ -1,0 +1,93 @@
+{% extends "base.html" %} {% block title %}Write Blog{% endblock %}
+{% block content%}
+<link rel="stylesheet" href="static/writeBlogStyle.css">
+    <main>
+        {% if user.free_blogs_remaining > 0 or user.blogs_remaining_this_month > 0 or generate %}
+        {% if wants_to_link_wordpress and user.website_url == '' %}
+        <form method="post" id="link-wordpress" name="link-wordpress">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <h2 align="center">Link to WordPress Website</h3>
+            <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="websiteURL"
+                    name="websiteURL"
+                    placeholder="Enter website URL"
+                    required
+                />
+                </div>
+                <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="wordPressUsername"
+                    name="wordPressUsername"
+                    placeholder="Enter Username for Wordpress Website"
+                    required
+                />
+                </div>
+                <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="appPassword1"
+                    name="appPassword1"
+                    placeholder="Enter application password"
+                    required
+                />
+                </div>
+                <div class="form-group">
+                <input
+                    type="text"
+                    class="form-control"
+                    id="appPassword2"
+                    name="appPassword2"
+                    placeholder="Confirm application password"
+                    required
+                />
+            </div>
+            <br />
+            <button type="submit" class="button">Link to WordPress</button>
+        </form>
+        {% endif %}
+        <form method="post" name="generate" id="generated-content">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <h2 align="center">Write Blog</h3>
+            <div class="form-group">
+                <input
+                type="text"
+                class="form-control"
+                id="blog-title"
+                name="blog-title"
+                placeholder="Enter Blog Title"
+                value="{{title}}"
+                />
+            </div>
+            <div class="generated-content-container" id="generated" name="generated-content" contenteditable="true">
+                {% if content == '' %}
+                Paste blog content here
+                {% endif %}
+                {{content | safe}}
+            </div>
+            <input type="hidden" name="div_content" id="divContentInput">
+            <input type="file" name="file" accept="image/*" id="image-input">
+            <label for="image-input" class="image-upload">Upload Image</label>
+            <br />
+            <button type="submit" id="generate-button" class="button">Publish to WordPress</button>
+        </form>
+        {% endif %}
+        <script>
+            document.getElementById('generated-content').addEventListener('submit', function (event) {
+              event.preventDefault(); 
+              captureDivContent();    
+              this.submit();         
+            });
+    
+            function captureDivContent() {
+              const divContent = document.getElementById('generated').innerHTML;
+              document.getElementById('divContentInput').value = divContent;
+            }
+          </script>
+    </main>
+{% endblock %}
