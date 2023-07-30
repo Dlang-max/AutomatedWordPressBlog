@@ -31,8 +31,6 @@ def profile():
 @login_required
 def generateBlog():
 
-    check_stripe_membership(current_user)
-
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
@@ -52,7 +50,7 @@ def generateBlog():
 
 
             
-            if image_url != None:
+            if image_url != '':
                 content = f'<img src="{get_images(BlogWriter.BlogWriter.getSubject(title=title))}" alt="blog image" width="100%" height="auto" /> \n' + content
 
             new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id, image_url=image_url)
@@ -181,26 +179,7 @@ def generateBlog():
 @login_required
 def writeBlog():
 
-    stripe_id = current_user.stripe_id
-    member = Member.query.filter_by(stripe_id=stripe_id).first()
-    if member:
-        subscription_id = member.subscription_id
-        try:
-            subscription = stripe.Subscription.retrieve(subscription_id)
-
-            membership_level = config.prices[subscription['items']['data'][0]['plan']['id']]
-        except stripe.error.StripeError as e:
-            print(':(')
-        
-        current_user.subscription_id = subscription_id
-        current_user.membership_level = membership_level
-        current_user.blogs_remaining_this_month = current_user.blogs_remaining_this_month + config.blogs_with_membership[membership_level]
-        current_user.has_paid = True
-        db.session.commit()
-
-        member_to_delete = Member.query.filter_by(stripe_id=stripe_id).first()
-        db.session.delete(member_to_delete)
-        db.session.commit()
+    check_stripe_membership(current_user)
 
     if request.method == 'POST':
 
@@ -261,31 +240,38 @@ def writeBlog():
                 r = requests.post(url, headers=header, json=post)
             except requests.exceptions.ConnectionError:
                 flash('Error connecting to WordPress. Please check your URL and try again.', category='error')
-                return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+                return render_template("writeBlog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
 
 
-
+            blog = Blog.query.filter_by(user_id=current_user.id).first()
             db.session.delete(blog)
             db.session.commit()
 
             flash('Blog Posted to WordPress!', category='success')
 
-            return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
+            return render_template("writeBlog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
         
         elif 'wordPressUsername' in request.form:
             website_url = request.form.get('websiteURL')
             website_username = request.form.get('wordPressUsername')
-            website_application_password = request.form.get('appPassword1')
-
-            current_user.website_url = website_url
-            current_user.website_username = website_username
-            current_user.website_application_password = website_application_password
-            db.session.commit()  
+            website_application_password_1 = request.form.get('appPassword1')
+            website_application_password_2 = request.form.get('appPassword2')
 
             blog = Blog.query.filter_by(user_id=current_user.id).first()
 
+
+            if website_application_password_1 != website_application_password_2:
+                flash('Application Passwords do not match.', category='error')
+                return render_template("writeBlog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+
+            current_user.website_url = website_url
+            current_user.website_username = website_username
+            current_user.website_application_password = website_application_password_1
+            db.session.commit()  
+
+
             flash('Linked to WordPress!', category='success')
-            return render_template("writeBlog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
+            return render_template("writeBlog.html", user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
         
     return render_template("writeBlog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 

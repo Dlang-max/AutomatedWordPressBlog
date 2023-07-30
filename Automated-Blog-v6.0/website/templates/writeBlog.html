@@ -64,7 +64,7 @@
                 value="{{title}}"
                 />
             </div>
-            <label for="generated-content" class="content-label">Paste blog content below</label>
+            <label for="generated-content" class="content-label">Paste blog content below:</label>
             <div class="generated-content-container" id="generated" name="generated-content" contenteditable="true">
                 {{content | safe}}
             </div>
@@ -73,6 +73,13 @@
             <label for="image-input" class="image-upload">Upload Image</label>
             <br />
             <button type="submit" id="generate-button" class="button">Publish to WordPress</button>
+        </form>
+        {% else %}
+        <form action="/upgradeMembership">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <h2 align="center">Upgrade Membership for More</h3>
+            <br />
+              <button type="submit" class="button">Upgrade Membership</button>
         </form>
         {% endif %}
         <script>

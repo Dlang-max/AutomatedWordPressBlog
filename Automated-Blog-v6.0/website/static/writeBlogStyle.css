@@ -56,7 +56,6 @@ main{
   
   .button:disabled:hover{
     background-color: #458eff;
-  
   }
   
   
@@ -94,7 +93,11 @@ main{
   }
 
   .content-label{
+    font-weight: bold;
+    align-self: flex-start;
     margin-top: 0.5rem;
+    margin-bottom: 2px;
+    margin-left: 5%;
   }
   
   @media (min-width: 1000px){
