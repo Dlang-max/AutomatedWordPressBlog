@@ -49,11 +49,15 @@ input:focus{
   border-radius: 10px;
   border: 0px;
   color: white;
+  margin-bottom: 10px;
+}
+
+#no-thanks{
+  height: 30px;
 }
 
 .button:disabled:hover{
   background-color: #458eff;
-
 }
 
 
@@ -68,6 +72,35 @@ p a{
 
 .button:hover{
   background-color: #2864b9;
+  cursor: pointer;
+}
+
+
+
+#no-thanks{
+  display: flex;
+  align-items: center;
+  background-color: rgb(197, 195, 195);
+  margin-bottom: 10px;
+}
+
+#no-thanks-button{
+  height: 100%;
+  width: 100%;
+  background-color: rgb(197, 195, 195);
+  cursor: pointer;
+}
+
+#no-thanks-button:hover{
+  height: 100%;
+  width: 100%;
+  background-color: gray;
+  cursor: pointer;
+}
+
+#no-thanks:hover{
+  background-color: gray;
+  cursor: pointer;
 }
 
 @media (min-width: 1000px){

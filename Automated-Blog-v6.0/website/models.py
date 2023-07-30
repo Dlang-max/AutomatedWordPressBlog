@@ -7,10 +7,10 @@ from sqlalchemy.sql import func
 
 class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    blog_title = db.Column(db.String(150))
-    blog_content = db.Column(db.String(20000))
+    blog_title = db.Column(db.String(150), default='')
+    blog_content = db.Column(db.String(20000), default='')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    image_url = db.Column(db.String(150))
+    image_url = db.Column(db.String(150), default='')
     image = db.Column(db.LargeBinary)
 
 class Member(db.Model):

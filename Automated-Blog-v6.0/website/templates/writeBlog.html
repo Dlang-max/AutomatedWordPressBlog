@@ -64,10 +64,8 @@
                 value="{{title}}"
                 />
             </div>
+            <label for="generated-content" class="content-label">Paste blog content below</label>
             <div class="generated-content-container" id="generated" name="generated-content" contenteditable="true">
-                {% if content == '' %}
-                Paste blog content here
-                {% endif %}
                 {{content | safe}}
             </div>
             <input type="hidden" name="div_content" id="divContentInput">

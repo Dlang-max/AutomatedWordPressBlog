@@ -93,7 +93,9 @@ main{
     box-shadow: 0 0 5px rgba(0,0,0,0.75);
   }
 
-
+  .content-label{
+    margin-top: 0.5rem;
+  }
   
   @media (min-width: 1000px){
     form{

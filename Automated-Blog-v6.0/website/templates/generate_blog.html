@@ -1,115 +1,120 @@
 {% extends "base.html" %} {% block title %}Generate Blog{% endblock %} {% block
-    content %}
-    <link rel="stylesheet" href="static/generateBlogStyle.css">
-    <main>
-    {% if user.free_blogs_remaining > 0 or user.blogs_remaining_this_month > 0 or generate %}
-    {% if content == '' %}
-    <form method="post" name="generate" id="generate">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <h2 align="center">Generate Blog</h3>
-        <div class="form-group">
+  content %}
+  <link rel="stylesheet" href="static/generateBlogStyle.css">
+  <main>
+  {% if user.free_blogs_remaining > 0 or user.blogs_remaining_this_month > 0 or generate %}
+  {% if content == '' %}
+  <form method="post" name="generate" id="generate">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <h2 align="center">Generate Blog</h3>
+      <div class="form-group">
+        <input
+          type="text"
+          class="form-control"
+          id="blog-title"
+          name="blog-title"
+          placeholder="Enter Blog Title"
+        />
+      </div>
+      <div class="form-group">
           <input
             type="text"
             class="form-control"
-            id="blog-title"
-            name="blog-title"
-            placeholder="Enter Blog Title"
+            id="additional-info"
+            name="additional-info"
+            placeholder="Enter Keywords, Links, or Other Info"
           />
         </div>
-        <div class="form-group">
-            <input
-              type="text"
-              class="form-control"
-              id="additional-info"
-              name="additional-info"
-              placeholder="Enter Keywords, Links, or Other Info"
-            />
-          </div>
-        <br />
-        <button type="submit" id="generate-button" class="button">Generate Blog</button>
-      </form>
-      {% else %}
-          {% if wants_to_link_wordpress and user.website_url == '' %}
-            <form method="post" id="link-wordpress" name="link-wordpress">
-              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-              <h2 align="center">Link to WordPress Website</h3>
-              <div class="form-group">
-                <input
-                    type="text"
-                    class="form-control"
-                    id="websiteURL"
-                    name="websiteURL"
-                    placeholder="Enter website URL"
-                    required
-                />
-                </div>
-                <div class="form-group">
-                <input
-                    type="text"
-                    class="form-control"
-                    id="wordPressUsername"
-                    name="wordPressUsername"
-                    placeholder="Enter Username for Wordpress Website"
-                    required
-                />
-                </div>
-                <div class="form-group">
-                <input
-                    type="text"
-                    class="form-control"
-                    id="appPassword1"
-                    name="appPassword1"
-                    placeholder="Enter application password"
-                    required
-                />
-                </div>
-                <div class="form-group">
-                <input
-                    type="text"
-                    class="form-control"
-                    id="appPassword2"
-                    name="appPassword2"
-                    placeholder="Confirm application password"
-                    required
-                />
-                </div>
-            </div>
-              <br />
-                <button type="submit" class="button">Link to WordPress</button>
-            </form>
-          {% endif %}
-      <form method="post" id="generated-content" name="generated">
-        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <h2 align="center">Generated Content</h3>
-        <div class="generated-content-container" id="generated" name="generated-content" contenteditable>
-          {{content | safe}}
-        </div>
-        <input type="hidden" name="div_content" id="divContentInput">
-        <br />
-          <button type="submit" class="button">Publish to WordPress</button>
-      </form>
-    {% endif %}
-    {% else %}
-    <form action="/upgradeMembership">
-      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-      <h2 align="center">Upgrade Membership for More</h3>
       <br />
-        <button type="submit" class="button">Upgrade Membership</button>
+      <button type="submit" id="generate-button" class="button">Generate Blog</button>
     </form>
-    {% endif %}
-      </main>
-      <script>
-        document.getElementById('generated-content').addEventListener('submit', function (event) {
-          event.preventDefault(); 
-          captureDivContent();    
-          this.submit();         
-        });
+    {% else %}
+        {% if wants_to_link_wordpress and user.website_url == '' %}
+          <form method="post" id="link-wordpress" name="link-wordpress">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <h2 align="center">Link to WordPress Website</h3>
+            <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="websiteURL"
+                  name="websiteURL"
+                  placeholder="Enter website URL"
+                  required
+              />
+              </div>
+              <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="wordPressUsername"
+                  name="wordPressUsername"
+                  placeholder="Enter Username for Wordpress Website"
+                  required
+              />
+              </div>
+              <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="appPassword1"
+                  name="appPassword1"
+                  placeholder="Enter application password"
+                  required
+              />
+              </div>
+              <div class="form-group">
+              <input
+                  type="text"
+                  class="form-control"
+                  id="appPassword2"
+                  name="appPassword2"
+                  placeholder="Confirm application password"
+                  required
+              />
+              </div>
+          </div>
+            <br />
+              <button type="submit" class="button">Link to WordPress</button>
+          </form>
+        {% endif %}
+    <form method="post" id="generated-content" name="generated">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <h2 align="center">Generated Content</h3>
+      <div class="generated-content-container" id="generated" name="generated-content" contenteditable>
+        {{content | safe}}
+      </div>
+      <input type="hidden" name="div_content" id="divContentInput">
+      <br />
+      <button type="submit" name="submit-button" class="button">Publish to WordPress</button>
+  </form>
+  <form method="post" id="no-thanks" name="no-thanks">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="no-thanks" value="no-thanks">
+    <button type="submit" name="submit-button" class="button" id="no-thanks-button">No Thanks</button>
+  </form>
+  {% endif %}
+  {% else %}
+  <form action="/upgradeMembership">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <h2 align="center">Upgrade Membership for More</h3>
+    <br />
+      <button type="submit" class="button">Upgrade Membership</button>
+  </form>
+  {% endif %}
+    </main>
+    <script>
+      document.getElementById('generated-content').addEventListener('submit', function (event) {
+        event.preventDefault(); 
+        captureDivContent();    
+        this.submit();         
+      });
 
-        function captureDivContent() {
-          const divContent = document.getElementById('generated').innerHTML;
-          document.getElementById('divContentInput').value = divContent;
-        }
-      </script>
-        
+      function captureDivContent() {
+        const divContent = document.getElementById('generated').innerHTML;
+        document.getElementById('divContentInput').value = divContent;
+      }
+    </script>
+      
 {% endblock %}
 
