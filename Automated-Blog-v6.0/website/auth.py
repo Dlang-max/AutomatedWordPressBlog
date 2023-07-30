@@ -290,9 +290,16 @@ def linkWordPress():
 @auth.route('/create-checkout-session', methods=['POST'])
 @login_required
 def create_checkout_session():
+        
     price = request.form.get('priceId')
     domain_url = 'http://localhost:5000/'
     stripe.api_key = config.stripe_keys["secret_key"]
+    if current_user.membership_level != 'Free':
+        stripe.Subscription.delete(current_user.subscription_id)
+        current_user.subscription_id = ''
+        current_user.membership_level = 'Free'
+        db.session.commit()
+
 
     try:
         checkout_session = stripe.checkout.Session.create(

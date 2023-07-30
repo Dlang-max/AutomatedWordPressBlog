@@ -58,6 +58,7 @@ input:focus{
 
 .button:disabled:hover{
   background-color: #458eff;
+  cursor: default;
 }
 
 

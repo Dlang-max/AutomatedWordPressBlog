@@ -129,8 +129,10 @@ def generateBlog():
             }
 
             if blog.image_url != '':
+                image_data = requests.get(blog.image_url).content
+
                 media = {
-                    'file': blog.image_url,
+                    'file': (blog.image_url, image_data, 'image/png'),
                     'status': 'publish'
                 }
 
