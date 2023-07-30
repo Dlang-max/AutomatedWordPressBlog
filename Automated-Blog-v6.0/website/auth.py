@@ -10,6 +10,7 @@ from .models import Member
 import pyotp
 from flask_mail import Message
 import datetime
+import re
 
 auth = Blueprint('auth', __name__)
 
@@ -105,7 +106,6 @@ def enter_verification():
                 return render_template("enterVerification.html", user=current_user, correct_code=True, id=id)
             else:
                 user = User.query.filter_by(id=id).first()
-                print(user)
                 user.password = generate_password_hash(password1, method='sha256')
                 user.token = ''
                 db.session.commit()
@@ -137,6 +137,8 @@ def sign_up():
             flash('Passwords don\'t match.', category='error')
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
+        elif not is_strong_password(password1):
+            flash('Password must contain at least one capital letter, one number, and one special character.', category='error')
         
         else:
             new_user = User(email=email, password=generate_password_hash(password1), 
@@ -234,6 +236,9 @@ def changePassword():
         elif len(password1) < 7:
             flash('Password must be at least 7 characters.', category='error')
             return render_template("changePassword.html", user=current_user)
+        elif not is_strong_password(password1):
+            flash('Password must contain at least one capital letter, one number, and one special character.', category='error')
+            return render_template("changePassword.html", user=current_user)
         else:
             current_user.password = generate_password_hash(password1)
             db.session.commit()
@@ -302,7 +307,6 @@ def create_checkout_session():
 
         current_user.stripe_id = checkout_session['id']
         db.session.commit()
-        print(current_user.stripe_id)
 
         return redirect(checkout_session.url, code=303)
     except Exception as e:
@@ -361,3 +365,15 @@ def sendVerifcationEmail(user, email):
         body=f'Verification code is {token}'
     )
     mail.send(message)
+
+def is_strong_password(password):
+    capital_letter_pattern = r'[A-Z]'
+    number_pattern = r'\d'
+    special_character_pattern = r'[!@#$%^&*()_+{}|:"<>?`\-=\[\]\\;\',./~]'
+    
+    if (re.search(capital_letter_pattern, password) and
+        re.search(number_pattern, password) and
+        re.search(special_character_pattern, password)):
+        return True
+    else:
+        return False

@@ -36,7 +36,6 @@ def generateBlog():
         subscription_id = member.subscription_id
         try:
             subscription = stripe.Subscription.retrieve(subscription_id)
-            print(subscription)
 
             membership_level = config.prices[subscription['items']['data'][0]['plan']['id']]
         except stripe.error.StripeError as e:
@@ -96,9 +95,6 @@ def generateBlog():
             if current_user.website_url == '':
 
                 blog = Blog.query.filter_by(user_id=current_user.id).first()
-                print(blog.blog_content)
-                print(current_user.id)
-                print(blog)
 
                 blog.blog_content = request.form.get('div_content')
                 db.session.commit()
@@ -120,7 +116,6 @@ def generateBlog():
             blog.blog_content = request.form.get('div_content')
             db.session.commit()
 
-            print('content: ' + request.form.get('div_content'))
 
 
 
