@@ -10,6 +10,8 @@ class Blog(db.Model):
     blog_title = db.Column(db.String(150))
     blog_content = db.Column(db.String(20000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    image_url = db.Column(db.String(150))
+    image = db.Column(db.LargeBinary)
 
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)

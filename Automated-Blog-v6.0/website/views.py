@@ -51,6 +51,7 @@ def generateBlog():
         db.session.delete(member_to_delete)
         db.session.commit()
 
+
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
@@ -73,7 +74,7 @@ def generateBlog():
             if image_url != None:
                 content = f'<img src="{getImages(BlogWriter.BlogWriter.getSubject(title=title))}" alt="blog image" width="100%" height="auto" /> \n' + content
 
-            new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id)
+            new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id, image_url=image_url)
             db.session.add(new_blog)
             db.session.commit()
 
@@ -84,8 +85,6 @@ def generateBlog():
             
             db.session.commit()  
   
-
-
             flash('Blog Generated', category='success')
 
             return render_template("generate_blog.html", generating=True, generate=True, user=current_user, title=title, content=content, wants_to_link_wordpress=False)
@@ -101,7 +100,8 @@ def generateBlog():
 
                 return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
             
-            url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
+            post_url = str(current_user.website_url) + '/wp-json/wp/v2/posts'
+            media_url = str(current_user.website_url) + '/wp-json/wp/v2/media'
 
             user = current_user.website_username
             password = current_user.website_application_password
@@ -125,8 +125,16 @@ def generateBlog():
                 'status': 'publish'
             }
 
+            if blog.image_url != None:
+                media = {
+                    'file': blog.image_url,
+                    'status': 'publish'
+                }
+
+
+
             try: 
-                r = requests.post(url, headers=header, json=post)
+                r = requests.post(post_url, headers=header, json=post)
             except requests.exceptions.ConnectionError:
                 flash('Error connecting to WordPress. Please check your URL and try again.', category='error')
                 return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
