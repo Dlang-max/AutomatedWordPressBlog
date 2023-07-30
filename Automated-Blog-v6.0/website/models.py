@@ -13,9 +13,17 @@ class Blog(db.Model):
     image_url = db.Column(db.String(150), default='')
     image = db.Column(db.LargeBinary)
 
+class WrittenBlog(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    blog_title = db.Column(db.String(150), default='')
+    blog_content = db.Column(db.String(20000), default='')
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    image_url = db.Column(db.String(150), default='')
+    image = db.Column(db.LargeBinary)
+
 class Member(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(150), unique=True)
+    email = db.Column(db.String(150))
     subscription_id = db.Column(db.String(150), unique=True)
     stripe_id = db.Column(db.String(150), unique=True)
 

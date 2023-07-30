@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, flash, jsonify, session
 from flask_login import login_required, current_user
 from .models import Blog
 from .models import Member
+from .models import WrittenBlog
 from . import db
 import json
 import BlogWriter
@@ -30,7 +31,7 @@ def profile():
 @views.route('/generate-blog', methods=['GET', 'POST'])
 @login_required
 def generateBlog():
-
+    check_stripe_membership(current_user)
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
@@ -178,9 +179,6 @@ def generateBlog():
 @views.route('/writeBlog', methods=['GET', 'POST'])
 @login_required
 def writeBlog():
-
-    check_stripe_membership(current_user)
-
     if request.method == 'POST':
 
         if 'blog-title' in request.form:
@@ -197,13 +195,13 @@ def writeBlog():
                 return render_template("writeBlog.html", user=current_user, title=title, content='', wants_to_link_wordpress=False)
             
             
-            new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id)
-            db.session.add(new_blog)
+            new_written_blog = WrittenBlog(blog_title=title, blog_content=content, user_id=current_user.id)
+            db.session.add(new_written_blog)
             db.session.commit()
 
             if current_user.website_url == '':
                 flash('Link to WordPress to post your blog.', category='error')
-                return render_template("writeBlog.html", user=current_user, title=new_blog.blog_title, content=new_blog.blog_content, wants_to_link_wordpress=True)
+                return render_template("writeBlog.html", user=current_user, title=new_written_blog.blog_title, content=new_written_blog.blog_content, wants_to_link_wordpress=True)
 
 
             if current_user.free_blogs_remaining == 0:
@@ -223,7 +221,7 @@ def writeBlog():
 
             header = {'Authorization': 'Basic ' + token.decode('utf-8')}
 
-            blog = Blog.query.filter_by(user_id=current_user.id).first()
+            blog = WrittenBlog.query.filter_by(user_id=current_user.id).first()
             blog.blog_content = request.form.get('div_content')
             db.session.commit()
 
@@ -243,7 +241,7 @@ def writeBlog():
                 return render_template("writeBlog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
 
 
-            blog = Blog.query.filter_by(user_id=current_user.id).first()
+            blog = WrittenBlog.query.filter_by(user_id=current_user.id).first()
             db.session.delete(blog)
             db.session.commit()
 
@@ -257,7 +255,7 @@ def writeBlog():
             website_application_password_1 = request.form.get('appPassword1')
             website_application_password_2 = request.form.get('appPassword2')
 
-            blog = Blog.query.filter_by(user_id=current_user.id).first()
+            blog = WrittenBlog.query.filter_by(user_id=current_user.id).first()
 
 
             if website_application_password_1 != website_application_password_2:
