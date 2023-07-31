@@ -32,7 +32,11 @@ def create_app():
     from website.auth import stripe_webhook
 
     csrf.exempt(stripe_webhook)
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+    # Local Database
+    # app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://strfhblwizdajz:1cb9c3fac484d0e956556dd679e91fd24c39e9c6120bf7abd65b21ae98d4458a@ec2-34-236-103-63.compute-1.amazonaws.com:5432/d8ao5eev9u89qg'
+
     db.init_app(app) 
 
     from .views import views
