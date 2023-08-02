@@ -16,7 +16,7 @@ class Blog(db.Model):
 class WrittenBlog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     blog_title = db.Column(db.String(150), default='')
-    blog_content = db.Column(db.String(20000), default='')
+    blog_content = db.Column(db.Text(), default='')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     image_url = db.Column(db.String(150), default='')
     image = db.Column(db.LargeBinary)

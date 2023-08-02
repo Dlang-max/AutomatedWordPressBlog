@@ -4,13 +4,13 @@ from .models import Admin
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import db, mail
 from flask_login import login_user, login_required, logout_user, current_user
-import config
 import stripe
 from .models import Member
 import pyotp
 from flask_mail import Message
 import datetime
 import re
+import os
 
 auth = Blueprint('auth', __name__)
 
@@ -190,7 +190,7 @@ def adminPanel():
 @auth.route('/config')
 @login_required
 def get_publishable_key():
-    stripe_config = {'publicKey': config.stripe_keys['publishable_key']}
+    stripe_config = {'publicKey': os.environ.get('stripe_publishable_key')}
     return jsonify(stripe_config)
 
 
@@ -250,7 +250,7 @@ def changePassword():
 @auth.route('/cancelMembership', methods=['GET', 'POST'])
 @login_required
 def cancelMembership():
-    stripe.api_key = config.stripe_keys["secret_key"]
+    stripe.api_key = os.environ.get('stripe_secret_key')
     stripe.Subscription.delete(current_user.subscription_id)
 
     current_user.subscription_id = ''
@@ -292,8 +292,8 @@ def linkWordPress():
 def create_checkout_session():
         
     price = request.form.get('priceId')
-    domain_url = 'http://localhost:5000/'
-    stripe.api_key = config.stripe_keys["secret_key"]
+    domain_url = 'http://localhost:5000'
+    stripe.api_key = os.environ.get('stripe_secret_key')
     if current_user.membership_level != 'Free':
         stripe.Subscription.delete(current_user.subscription_id)
         current_user.subscription_id = ''
@@ -328,7 +328,7 @@ def stripe_webhook():
 
     try:
         event = stripe.Webhook.construct_event(
-            payload, sig_header, config.stripe_keys["endpoint_secret"]
+            payload, sig_header, os.environ.get('stripe_endpoint_secret')
         )
 
     except ValueError as e:

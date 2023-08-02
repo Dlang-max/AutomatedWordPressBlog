@@ -6,11 +6,15 @@ from .models import WrittenBlog
 from . import db
 import json
 import BlogWriter
-import config
 import stripe
 import base64
 import requests
 import openai
+import os
+from .tasks import add_blog
+from .info import prices, blogs_with_membership
+
+
 
 views = Blueprint('views', __name__)
 
@@ -32,6 +36,8 @@ def profile():
 @login_required
 def generateBlog():
     check_stripe_membership(current_user)
+
+    
     if request.method == 'POST':
         if 'blog-title' in request.form :
             title = request.form.get('blog-title')
@@ -41,22 +47,8 @@ def generateBlog():
                 flash('Please enter a title for your blog.', category='error')
                 return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
-            try: 
-                outline = BlogWriter.BlogWriter.writeBlogOutline(title=title)
-                content = BlogWriter.BlogWriter.writeBlog(title=title, outline=outline, additional_information=additional_information)
-                image_url = get_images(BlogWriter.BlogWriter.getSubject(title=title))
-            except openai.error.APIConnectionError as e:
-                flash('Error generating blog. Try again later.', category='error')
-                return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
-
-            
-            if image_url != '':
-                content = f'<img src="{get_images(BlogWriter.BlogWriter.getSubject(title=title))}" alt="blog image" width="100%" height="auto" /> \n' + content
-
-            new_blog = Blog(blog_title=title, blog_content=content, user_id=current_user.id, image_url=image_url)
-            db.session.add(new_blog)
-            db.session.commit()
+            task = add_blog.delay(title, additional_information, current_user.id)
 
             # Remove a blog from the user's remaining blogs
             if current_user.free_blogs_remaining == 0:
@@ -64,8 +56,8 @@ def generateBlog():
             current_user.free_blogs_remaining = 0
             db.session.commit()  
   
-            flash('Blog Generated', category='success')
-            return render_template("generate_blog.html", generating=True, generate=True, user=current_user, title=title, content=content, wants_to_link_wordpress=False)
+            flash('Blog Generating', category='success')
+            return render_template("generate_blog.html", generating=True, generate=True, user=current_user, title=title, content='', wants_to_link_wordpress=False)
 
         if 'websiteURL' in request.form:
             website_url = request.form.get('websiteURL')
@@ -159,7 +151,9 @@ def generateBlog():
                 return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=True)
             
     
-            
+            if check_if_user_has_blog(current_user):
+                blog = Blog.query.filter_by(user_id=current_user.id).first()
+                return render_template("generate_blog.html", generating=False, generate=True, user=current_user, title=blog.blog_title, content=blog.blog_content, wants_to_link_wordpress=False)
             return render_template("generate_blog.html", generating=False, generate=False, user=current_user, title='', content='', wants_to_link_wordpress=False)
 
 
@@ -285,7 +279,7 @@ Returns:
 def get_images(query):
 
     query = query.replace(' ', '+')
-    url = f'https://pixabay.com/api/?key={config.pixabay_api_key}&q={query}&image_type=photo'
+    url = f'https://pixabay.com/api/?key={os.environ.get("pixabay_api_key")}&q={query}&image_type=photo'
 
     response = requests.get(url)
     data = response.json()
@@ -304,13 +298,13 @@ def check_stripe_membership(current_user):
         try:
             subscription = stripe.Subscription.retrieve(subscription_id)
 
-            membership_level = config.prices[subscription['items']['data'][0]['plan']['id']]
+            membership_level = info.prices[subscription['items']['data'][0]['plan']['id']]
         except stripe.error.StripeError as e:
             print(':(')
         
         current_user.subscription_id = subscription_id
         current_user.membership_level = membership_level
-        current_user.blogs_remaining_this_month = current_user.blogs_remaining_this_month + config.blogs_with_membership[membership_level]
+        current_user.blogs_remaining_this_month = current_user.blogs_remaining_this_month + info.blogs_with_membership[membership_level]
         current_user.has_paid = True
         db.session.commit()
 

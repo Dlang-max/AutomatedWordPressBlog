@@ -1,7 +1,7 @@
 import openai
-import config
+import os
 
-openai.api_key = config.api_key
+openai.api_key = os.environ.get('open_ai_api_key')
 
 class BlogWriter():
 
